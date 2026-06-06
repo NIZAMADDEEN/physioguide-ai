@@ -1,0 +1,123 @@
+/* ============================================================
+   PhysioGuide AI — Design Tokens
+   Derived from DESIGN.md (Stitch export)
+   ============================================================ */
+
+:root {
+  /* --- Color Palette --- */
+  --color-primary:                  #004e9f;
+  --color-on-primary:               #ffffff;
+  --color-primary-container:        #0066cc;
+  --color-on-primary-container:     #dfe8ff;
+  --color-primary-fixed:            #d7e3ff;
+  --color-primary-fixed-dim:        #aac7ff;
+  --color-on-primary-fixed:         #001b3e;
+  --color-on-primary-fixed-variant: #00458e;
+  --color-inverse-primary:          #aac7ff;
+  --color-surface-tint:             #005cba;
+
+  --color-secondary:                #006b5f;
+  --color-on-secondary:             #ffffff;
+  --color-secondary-container:      #62fae3;
+  --color-on-secondary-container:   #007165;
+  --color-secondary-fixed:          #62fae3;
+  --color-secondary-fixed-dim:      #3cddc7;
+  --color-on-secondary-fixed:       #00201c;
+  --color-on-secondary-fixed-variant:#005047;
+
+  --color-tertiary:                 #883700;
+  --color-on-tertiary:              #ffffff;
+  --color-tertiary-container:       #af4900;
+  --color-on-tertiary-container:    #ffe3d6;
+  --color-tertiary-fixed:           #ffdbcb;
+  --color-tertiary-fixed-dim:       #ffb692;
+  --color-on-tertiary-fixed:        #341100;
+  --color-on-tertiary-fixed-variant:#793000;
+
+  --color-error:                    #ba1a1a;
+  --color-on-error:                 #ffffff;
+  --color-error-container:          #ffdad6;
+  --color-on-error-container:       #93000a;
+
+  --color-background:               #f8f9ff;
+  --color-on-background:            #0b1c30;
+  --color-surface:                  #f8f9ff;
+  --color-surface-dim:              #cbdbf5;
+  --color-surface-bright:           #f8f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low:    #eff4ff;
+  --color-surface-container:        #e5eeff;
+  --color-surface-container-high:   #dce9ff;
+  --color-surface-container-highest:#d3e4fe;
+  --color-surface-variant:          #d3e4fe;
+  --color-on-surface:               #0b1c30;
+  --color-on-surface-variant:       #414753;
+  --color-inverse-surface:          #213145;
+  --color-inverse-on-surface:       #eaf1ff;
+  --color-outline:                  #727784;
+  --color-outline-variant:          #c1c6d5;
+
+  /* --- Typography --- */
+  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-display-lg-size:    48px;
+  --text-display-lg-weight:  700;
+  --text-display-lg-lh:      1.2;
+  --text-display-lg-ls:      -0.02em;
+
+  --text-headline-lg-size:   32px;
+  --text-headline-lg-weight: 600;
+  --text-headline-lg-lh:     1.3;
+  --text-headline-lg-ls:     -0.01em;
+
+  --text-headline-lg-mobile-size:   24px;
+  --text-headline-lg-mobile-weight: 600;
+  --text-headline-lg-mobile-lh:     1.3;
+
+  --text-headline-md-size:   24px;
+  --text-headline-md-weight: 600;
+  --text-headline-md-lh:     1.4;
+
+  --text-body-lg-size:       18px;
+  --text-body-lg-weight:     400;
+  --text-body-lg-lh:         1.6;
+
+  --text-body-md-size:       16px;
+  --text-body-md-weight:     400;
+  --text-body-md-lh:         1.5;
+
+  --text-label-md-size:      14px;
+  --text-label-md-weight:    500;
+  --text-label-md-lh:        1.2;
+  --text-label-md-ls:        0.01em;
+
+  --text-label-sm-size:      12px;
+  --text-label-sm-weight:    600;
+  --text-label-sm-lh:        1;
+
+  /* --- Spacing (4px base grid) --- */
+  --space-xs:   0.5rem;   /* 8px  */
+  --space-sm:   1rem;     /* 16px */
+  --space-md:   1.5rem;   /* 24px */
+  --space-lg:   2rem;     /* 32px */
+  --space-xl:   3rem;     /* 48px */
+  --gutter:     24px;
+  --container-max: 1280px;
+  --margin-mobile: 16px;
+
+  /* --- Border Radius --- */
+  --radius-sm:   0.25rem;  /* 4px  */
+  --radius-md:   0.5rem;   /* 8px  */
+  --radius-lg:   0.75rem;  /* 12px */
+  --radius-xl:   1rem;     /* 16px */
+  --radius-2xl:  1.5rem;   /* 24px */
+  --radius-3xl:  2rem;     /* 32px */
+  --radius-full: 9999px;
+
+  /* --- Elevation / Shadows --- */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.05);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.10);
+  --shadow-xl:  0 16px 48px rgba(0,0,0,0.12);
+  --shadow-primary: 0 8px 24px rgba(0, 78, 159, 0.20);
+}
