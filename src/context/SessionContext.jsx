@@ -50,12 +50,18 @@ export function SessionProvider({ children }) {
   const loadAnalyticsData = useCallback(async () => {
     setStatsLoading(true);
     try {
-      const [progress, mobility, weekly, timeline] = await Promise.all([
+      // Use allSettled so a single failing call doesn't block everything else
+      const [progressResult, mobilityResult, weeklyResult, timelineResult] = await Promise.allSettled([
         getProgressData(90),
         getMobilityScores(),
         getWeeklyExercises(),
         getTimeline(10),
       ]);
+
+      const progress  = progressResult.status  === 'fulfilled' && Array.isArray(progressResult.value)  ? progressResult.value  : [];
+      const mobility  = mobilityResult.status  === 'fulfilled' && Array.isArray(mobilityResult.value)  ? mobilityResult.value  : [];
+      const weekly    = weeklyResult.status    === 'fulfilled' && Array.isArray(weeklyResult.value)    ? weeklyResult.value    : [];
+      const timeline  = timelineResult.status  === 'fulfilled' && Array.isArray(timelineResult.value)  ? timelineResult.value  : [];
 
       setProgressData(progress);
       setMobilityScores(mobility);
@@ -64,7 +70,7 @@ export function SessionProvider({ children }) {
 
       // Derive overall recovery from average mobility scores
       const avgMobility =
-        Array.isArray(mobility) && mobility.length > 0
+        mobility.length > 0
           ? Math.round(mobility.reduce((sum, item) => sum + item.score, 0) / mobility.length)
           : 82;
 

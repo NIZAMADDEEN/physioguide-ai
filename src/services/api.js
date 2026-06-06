@@ -27,7 +27,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // 401 = expired/missing token, 422 = malformed token (flask-jwt-extended)
+    if (error.response?.status === 401 || error.response?.status === 422) {
       removeToken();
       removeStoredUser();
       // Ensure we don't cause redirect loops if we are already on login page

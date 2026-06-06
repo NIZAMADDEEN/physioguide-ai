@@ -18,7 +18,7 @@ export default function DashboardPage() {
     statsLoading 
   } = useSession();
 
-  const recentSessions = timelineData?.filter(t => t.type === 'session').slice(0, 5) || [];
+  const recentSessions = Array.isArray(timelineData) ? timelineData.filter(t => t.type === 'session').slice(0, 5) : [];
 
   const tableColumns = [
     { key: 'date', label: 'Date', render: (row) => formatRelativeDate(row.date) },
