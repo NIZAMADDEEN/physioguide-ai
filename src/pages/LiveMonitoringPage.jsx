@@ -6,8 +6,8 @@ import { useExercise } from '../hooks/useExercise';
 import { useSession } from '../hooks/useSession';
 import WebcamPanel from '../components/WebcamPanel';
 import FeedbackPanel from '../components/FeedbackPanel';
-import ProgressCard from '../components/ProgressCard';
 import SessionSummaryModal from '../components/SessionSummaryModal';
+import Button from '../components/common/Button';
 
 export default function LiveMonitoringPage() {
   const [searchParams] = useSearchParams();
@@ -22,8 +22,15 @@ export default function LiveMonitoringPage() {
     accuracy, 
     statusMsg, 
     lastSessionSummary, 
+    isPaused,
+    sessionDuration,
+    corrections,
+    successNotifications,
+    isCalibrated,
     startSession, 
     enableCamera, 
+    pauseSession,
+    resumeSession,
     endSession, 
     clearSessionSummary 
   } = useSession();
@@ -62,29 +69,84 @@ export default function LiveMonitoringPage() {
   if (!selectedExercise) return null;
 
   return (
-    <div className="row g-4 h-100">
+    <div className="row g-4 h-100 align-items-stretch">
       
-      {/* Viewport Area */}
-      <div className="col-12 col-xl-8 d-flex flex-column">
+      {/* Viewport & Bottom Controls Area */}
+      <div className="col-12 col-xl-8 d-flex flex-column gap-3">
         <WebcamPanel 
           isActive={cameraActive}
+          isPaused={isPaused}
           onStart={enableCamera}
           reps={reps}
           statusMsg={statusMsg}
           accuracy={accuracy}
+          exercise={selectedExercise}
+          isCalibrated={isCalibrated}
         />
+
+        {/* Bottom Controls Panel */}
+        <div 
+          className="d-flex justify-content-center align-items-center gap-3 p-3 rounded-4 shadow-sm border" 
+          style={{ background: 'var(--color-surface-container)', minHeight: '80px' }}
+        >
+          {!cameraActive ? (
+            <Button 
+              size="lg" 
+              variant="primary" 
+              icon="videocam" 
+              onClick={enableCamera} 
+              className="px-5 shadow-primary"
+            >
+              Start Camera & Tracking
+            </Button>
+          ) : (
+            <div className="d-flex gap-3">
+              {isPaused ? (
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  icon="play_arrow" 
+                  onClick={resumeSession} 
+                  className="px-4 bg-success text-white border-success hover-bg-success"
+                >
+                  Resume
+                </Button>
+              ) : (
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  icon="pause" 
+                  onClick={pauseSession} 
+                  className="px-4 bg-warning text-dark border-warning hover-bg-warning"
+                >
+                  Pause
+                </Button>
+              )}
+              <Button 
+                size="lg" 
+                variant="outline-white" 
+                icon="stop" 
+                onClick={handleEndSession} 
+                className="px-4 bg-danger text-white border-danger hover-bg-danger"
+              >
+                Stop
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Sidebar Metrics */}
-      <div className="col-12 col-xl-4 d-flex flex-column gap-4">
+      {/* Sidebar Metrics & Logs */}
+      <div className="col-12 col-xl-4">
         <FeedbackPanel 
-          exercise={selectedExercise} 
-          onEndSession={handleEndSession} 
-        />
-
-        <ProgressCard 
-          title="Current Form Score"
-          score={accuracy}
+          exercise={selectedExercise}
+          reps={reps}
+          accuracy={accuracy}
+          sessionDuration={sessionDuration}
+          isPaused={isPaused}
+          corrections={corrections}
+          successNotifications={successNotifications}
+          cameraActive={cameraActive}
         />
       </div>
 

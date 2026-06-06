@@ -26,6 +26,13 @@ export function SessionProvider({ children }) {
   const [accuracyHistory, setAccuracyHistory] = useState([]);
   const [lastSessionSummary, setLastSessionSummary] = useState(null);
 
+  // ─── Play / Pause, Stopwatch Timer & Live Feedback logs ────────────────────
+  const [isPaused, setIsPaused] = useState(false);
+  const [sessionDuration, setSessionDuration] = useState(0);
+  const [isCalibrated, setIsCalibrated] = useState(false);
+  const [corrections, setCorrections] = useState([]);
+  const [successNotifications, setSuccessNotifications] = useState([]);
+
   // ─── Dashboard & Analytics States ──────────────────────────────────────────
   const [dashboardStats, setDashboardStats] = useState({
     overallRecovery: '—',
@@ -77,6 +84,11 @@ export function SessionProvider({ children }) {
       // Reset all states on logout
       setActiveSession(null);
       setCameraActive(false);
+      setIsPaused(false);
+      setSessionDuration(0);
+      setIsCalibrated(false);
+      setCorrections([]);
+      setSuccessNotifications([]);
       setReps(0);
       setAccuracy(0);
       setAccuracyHistory([]);
@@ -96,30 +108,80 @@ export function SessionProvider({ children }) {
     loadAnalyticsData();
   }, [user, loadAnalyticsData]);
 
-  // ─── Posture Simulation Loop (runs while camera is active) ─────────────────
+  // ─── Active Stopwatch Timer ────────────────────────────────────────────────
   useEffect(() => {
-    if (!cameraActive || !activeSession) return;
+    if (!cameraActive || !activeSession || isPaused) return;
 
-    setStatusMsg('Calibrating posture...');
-    const calibTimer = setTimeout(() => {
-      setStatusMsg('Good form! Keep going.');
-      setAccuracy(85);
-      setAccuracyHistory((prev) => [...prev, 85]);
-    }, 2000);
+    const stopwatch = setInterval(() => {
+      setSessionDuration((d) => d + 1);
+    }, 1000);
+
+    return () => clearInterval(stopwatch);
+  }, [cameraActive, activeSession, isPaused]);
+
+  // ─── Posture Simulation Loop (runs while camera is active and not paused) ─
+  useEffect(() => {
+    if (!cameraActive || !activeSession || isPaused) return;
+
+    if (!isCalibrated) {
+      setStatusMsg('Calibrating posture...');
+      const calibTimer = setTimeout(() => {
+        setStatusMsg('Good form! Keep going.');
+        setAccuracy(88);
+        setAccuracyHistory((prev) => [...prev, 88]);
+        setIsCalibrated(true);
+        setSuccessNotifications((prev) => [
+          {
+            id: `calib-${Date.now()}`,
+            text: 'System Calibrated. Tracking active!',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            type: 'system',
+          },
+          ...prev,
+        ]);
+      }, 2000);
+      return () => clearTimeout(calibTimer);
+    }
 
     const simInterval = setInterval(() => {
       setReps((r) => {
         const next = r + 1;
         let currentAccuracy;
+        let nextMsg;
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
         if (next % 3 === 0) {
-          setStatusMsg('Adjust your knee angle slightly.');
+          nextMsg = 'Adjust your knee angle slightly.';
           currentAccuracy = Math.floor(Math.random() * 20) + 70; // 70–90%
+          
+          setCorrections((prev) => [
+            {
+              id: `corr-${Date.now()}`,
+              text: 'Knee extension off by 12 degrees. Raise hips slightly.',
+              timestamp: timeStr,
+              severity: 'warning',
+            },
+            ...prev.slice(0, 4),
+          ]);
         } else {
-          setStatusMsg('Great! Maintain this pace.');
-          currentAccuracy = Math.floor(Math.random() * 15) + 85; // 85–100%
+          nextMsg = 'Great! Maintain this pace.';
+          currentAccuracy = Math.floor(Math.random() * 12) + 88; // 88–100%
+          
+          // Clear older corrections to simulate form correction success
+          setCorrections((prev) => prev.filter((_, idx) => idx > 0));
+          
+          setSuccessNotifications((prev) => [
+            {
+              id: `rep-${next}-${Date.now()}`,
+              text: `Rep ${next} complete: Excellent depth and alignment (${currentAccuracy}% accuracy).`,
+              timestamp: timeStr,
+              type: 'rep',
+            },
+            ...prev.slice(0, 4),
+          ]);
         }
 
+        setStatusMsg(nextMsg);
         setAccuracy(currentAccuracy);
         setAccuracyHistory((prev) => [...prev, currentAccuracy]);
 
@@ -128,7 +190,7 @@ export function SessionProvider({ children }) {
           updateSessionMetrics(activeSession.sessionId, {
             reps: next,
             accuracy: currentAccuracy,
-            statusMsg,
+            statusMsg: nextMsg,
           }).catch((err) =>
             console.warn('[SessionContext] Metric update failed:', err.message)
           );
@@ -139,10 +201,9 @@ export function SessionProvider({ children }) {
     }, 4500);
 
     return () => {
-      clearTimeout(calibTimer);
       clearInterval(simInterval);
     };
-  }, [cameraActive, activeSession, statusMsg]);
+  }, [cameraActive, activeSession, isPaused, isCalibrated]);
 
   // ─── Start a new exercise session ──────────────────────────────────────────
   const startSession = useCallback(
@@ -152,6 +213,11 @@ export function SessionProvider({ children }) {
         selectExercise(exerciseObj);
         setActiveSession(session);
         setCameraActive(false);
+        setIsPaused(false);
+        setSessionDuration(0);
+        setIsCalibrated(false);
+        setCorrections([]);
+        setSuccessNotifications([]);
         setReps(0);
         setAccuracy(0);
         setAccuracyHistory([]);
@@ -169,6 +235,19 @@ export function SessionProvider({ children }) {
   // ─── Enable the posture camera ─────────────────────────────────────────────
   const enableCamera = useCallback(() => {
     setCameraActive(true);
+    setIsPaused(false);
+    setStatusMsg('Camera active. Prepare to calibrate.');
+  }, []);
+
+  // ─── Play / Pause Actions ──────────────────────────────────────────────────
+  const pauseSession = useCallback(() => {
+    setIsPaused(true);
+    setStatusMsg('Session paused.');
+  }, []);
+
+  const resumeSession = useCallback(() => {
+    setIsPaused(false);
+    setStatusMsg('Session resumed.');
   }, []);
 
   // ─── End the session, persist to Flask, then refresh analytics ─────────────
@@ -177,6 +256,7 @@ export function SessionProvider({ children }) {
 
     // Stop camera immediately for UX
     setCameraActive(false);
+    setIsPaused(false);
 
     // Compute summary from live tracking data
     const finalReps = reps;
@@ -190,6 +270,7 @@ export function SessionProvider({ children }) {
     const summary = {
       reps: finalReps,
       accuracy: avgAccuracy,
+      duration: sessionDuration,
       exercise: selectedExercise,
       completedAt: new Date().toISOString(),
     };
@@ -203,7 +284,7 @@ export function SessionProvider({ children }) {
         await endSessionApi(activeSession.sessionId, {
           reps: finalReps,
           accuracy: avgAccuracy,
-          duration: null, // could calculate from startedAt if available
+          duration: sessionDuration,
         });
       }
     } catch (err) {
@@ -277,7 +358,7 @@ export function SessionProvider({ children }) {
         return [...prev, { date: todayStr, score: avgAccuracy, sessions: 1 }];
       });
     }
-  }, [activeSession, reps, accuracyHistory, selectedExercise, loadAnalyticsData]);
+  }, [activeSession, reps, accuracyHistory, selectedExercise, loadAnalyticsData, sessionDuration]);
 
   // ─── Clear session summary after modal is dismissed ────────────────────────
   const clearSessionSummary = useCallback(() => {
@@ -295,6 +376,11 @@ export function SessionProvider({ children }) {
       accuracy,
       statusMsg,
       lastSessionSummary,
+      isPaused,
+      sessionDuration,
+      corrections,
+      successNotifications,
+      isCalibrated,
       // Dashboard & Analytics
       dashboardStats,
       progressData,
@@ -305,6 +391,8 @@ export function SessionProvider({ children }) {
       // Actions
       startSession,
       enableCamera,
+      pauseSession,
+      resumeSession,
       endSession,
       clearSessionSummary,
       refreshAnalytics: loadAnalyticsData,
@@ -316,6 +404,11 @@ export function SessionProvider({ children }) {
       accuracy,
       statusMsg,
       lastSessionSummary,
+      isPaused,
+      sessionDuration,
+      corrections,
+      successNotifications,
+      isCalibrated,
       dashboardStats,
       progressData,
       mobilityScores,
@@ -324,6 +417,8 @@ export function SessionProvider({ children }) {
       statsLoading,
       startSession,
       enableCamera,
+      pauseSession,
+      resumeSession,
       endSession,
       clearSessionSummary,
       loadAnalyticsData,
