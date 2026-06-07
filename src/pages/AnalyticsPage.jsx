@@ -5,6 +5,7 @@ import Loader from '../components/common/Loader';
 import RecoveryLineChart from '../components/charts/RecoveryLineChart';
 import MobilityDoughnut from '../components/charts/MobilityDoughnut';
 import ExerciseBarChart from '../components/charts/ExerciseBarChart';
+import ExerciseDistributionPie from '../components/charts/ExerciseDistributionPie';
 import DataTable from '../components/common/DataTable';
 import ChartCard from '../components/ChartCard';
 
@@ -15,6 +16,7 @@ export default function AnalyticsPage() {
     progressData, 
     mobilityScores, 
     weeklyExercises, 
+    exerciseDistribution,
     statsLoading 
   } = useSession();
 
@@ -83,11 +85,29 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Exercise Adherence Bar Chart */}
+      {/* Exercise Adherence Bar Chart & Distribution */}
       <div className="row g-4">
-        <div className="col-12">
+        <div className="col-12 col-xl-8">
           <ChartCard title="Weekly Exercise Adherence" height="300px">
             {statsLoading ? <Loader variant="skeleton" /> : <ExerciseBarChart data={weeklyExercises} />}
+          </ChartCard>
+        </div>
+        <div className="col-12 col-xl-4">
+          <ChartCard title="Exercise Distribution" height="auto" className="d-flex flex-column h-100">
+            <div style={{ height: '240px' }} className="mb-4 flex-grow-1">
+              {statsLoading ? <Loader variant="skeleton" /> : <ExerciseDistributionPie data={exerciseDistribution} />}
+            </div>
+            {/* Legend */}
+            {!statsLoading && exerciseDistribution && (
+              <div className="mt-auto row g-2">
+                {exerciseDistribution.map((item, i) => (
+                  <div key={i} className="col-6 d-flex align-items-center gap-2">
+                    <div className="rounded-circle" style={{ width: 8, height: 8, backgroundColor: ['#006B5F', '#B1CC29', '#E6EEED', '#BA1A1A', '#f59e0b', '#10b981', '#6366f1'][i % 7] }}></div>
+                    <span className="text-label-sm text-truncate" title={item.name}>{item.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </ChartCard>
         </div>
       </div>

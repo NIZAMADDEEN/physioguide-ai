@@ -73,3 +73,21 @@ export async function getTimeline(range = 30) {
   const response = await api.get('/analytics/timeline', { params: { range } });
   return response.data; // Expects array of activities
 }
+
+/**
+ * Fetches the user's total sessions, average accuracy, and active streak.
+ * @returns {Promise<Object>} { total_sessions, average_accuracy, active_streak }
+ */
+export async function getSummaryStats() {
+  const response = await api.get('/analytics/summary');
+  return response.data;
+}
+
+/**
+ * Fetches the distribution of completed exercises by category.
+ * @returns {Promise<Array>} Array of { name, count } objects
+ */
+export async function getExerciseDistribution() {
+  const response = await api.get('/analytics/distribution');
+  return response.data;
+}

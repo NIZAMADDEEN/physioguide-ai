@@ -42,7 +42,7 @@ export default function DashboardPage() {
           <StatCard title="Completed Sessions" value={dashboardStats.completedSessions} icon="task_alt" trend="3 pending" isPositive={false} />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
-          <StatCard title="Next Appointment" value={dashboardStats.nextAppointment} icon="calendar_today" trend="Dr. Chen — Virtual" isPositive={false} />
+          <StatCard title="Average Accuracy" value={dashboardStats.averageAccuracy} icon="analytics" trend="Lifetime Average" isPositive={true} />
         </div>
       </div>
 

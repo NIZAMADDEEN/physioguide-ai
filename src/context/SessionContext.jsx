@@ -9,6 +9,8 @@ import {
   getMobilityScores,
   getWeeklyExercises,
   getTimeline,
+  getSummaryStats,
+  getExerciseDistribution,
 } from '../services/sessionService';
 
 export const SessionContext = createContext(null);
@@ -39,11 +41,13 @@ export function SessionProvider({ children }) {
     activeStreak: '—',
     completedSessions: '—',
     nextAppointment: '—',
+    averageAccuracy: '—',
   });
   const [progressData, setProgressData] = useState([]);
   const [mobilityScores, setMobilityScores] = useState([]);
   const [weeklyExercises, setWeeklyExercises] = useState([]);
   const [timelineData, setTimelineData] = useState([]);
+  const [exerciseDistribution, setExerciseDistribution] = useState([]);
   const [statsLoading, setStatsLoading] = useState(false);
 
   // ─── Load analytics from Flask backend on user login ───────────────────────
@@ -51,22 +55,27 @@ export function SessionProvider({ children }) {
     setStatsLoading(true);
     try {
       // Use allSettled so a single failing call doesn't block everything else
-      const [progressResult, mobilityResult, weeklyResult, timelineResult] = await Promise.allSettled([
+      const [progressResult, mobilityResult, weeklyResult, timelineResult, summaryResult, distributionResult] = await Promise.allSettled([
         getProgressData(90),
         getMobilityScores(),
         getWeeklyExercises(),
         getTimeline(10),
+        getSummaryStats(),
+        getExerciseDistribution(),
       ]);
 
-      const progress  = progressResult.status  === 'fulfilled' && Array.isArray(progressResult.value)  ? progressResult.value  : [];
-      const mobility  = mobilityResult.status  === 'fulfilled' && Array.isArray(mobilityResult.value)  ? mobilityResult.value  : [];
-      const weekly    = weeklyResult.status    === 'fulfilled' && Array.isArray(weeklyResult.value)    ? weeklyResult.value    : [];
-      const timeline  = timelineResult.status  === 'fulfilled' && Array.isArray(timelineResult.value)  ? timelineResult.value  : [];
+      const progress     = progressResult.status     === 'fulfilled' && Array.isArray(progressResult.value)     ? progressResult.value     : [];
+      const mobility     = mobilityResult.status     === 'fulfilled' && Array.isArray(mobilityResult.value)     ? mobilityResult.value     : [];
+      const weekly       = weeklyResult.status       === 'fulfilled' && Array.isArray(weeklyResult.value)       ? weeklyResult.value       : [];
+      const timeline     = timelineResult.status     === 'fulfilled' && Array.isArray(timelineResult.value)     ? timelineResult.value     : [];
+      const summary      = summaryResult.status      === 'fulfilled' && summaryResult.value                     ? summaryResult.value      : null;
+      const distribution = distributionResult.status === 'fulfilled' && Array.isArray(distributionResult.value) ? distributionResult.value : [];
 
       setProgressData(progress);
       setMobilityScores(mobility);
       setWeeklyExercises(weekly);
       setTimelineData(timeline);
+      setExerciseDistribution(distribution);
 
       // Derive overall recovery from average mobility scores
       const avgMobility =
@@ -77,6 +86,9 @@ export function SessionProvider({ children }) {
       setDashboardStats((prev) => ({
         ...prev,
         overallRecovery: `${avgMobility}%`,
+        activeStreak: summary ? `${summary.active_streak} Days` : '0 Days',
+        completedSessions: summary ? summary.total_sessions.toString() : '0',
+        averageAccuracy: summary ? `${summary.average_accuracy}%` : '—',
       }));
     } catch (err) {
       console.error('[SessionContext] Failed to load analytics:', err.message);
@@ -393,6 +405,7 @@ export function SessionProvider({ children }) {
       mobilityScores,
       weeklyExercises,
       timelineData,
+      exerciseDistribution,
       statsLoading,
       // Actions
       startSession,
@@ -420,6 +433,7 @@ export function SessionProvider({ children }) {
       mobilityScores,
       weeklyExercises,
       timelineData,
+      exerciseDistribution,
       statsLoading,
       startSession,
       enableCamera,
