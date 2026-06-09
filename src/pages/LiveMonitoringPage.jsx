@@ -37,7 +37,6 @@ export default function LiveMonitoringPage() {
 
   const [showSummary, setShowSummary] = useState(false);
 
-  // Fallback to fetch exercise & start session on direct refresh
   useEffect(() => {
     if (!exerciseId) {
       navigate(ROUTES.EXERCISES);
@@ -69,25 +68,28 @@ export default function LiveMonitoringPage() {
   if (!selectedExercise) return null;
 
   return (
-    <div className="row g-4 h-100 align-items-stretch">
+    <div className="row g-3 h-100 align-items-stretch">
       
-      {/* Viewport & Bottom Controls Area */}
-      <div className="col-12 col-xl-8 d-flex flex-column gap-3">
-        <WebcamPanel 
-          isActive={cameraActive}
-          isPaused={isPaused}
-          onStart={enableCamera}
-          reps={reps}
-          statusMsg={statusMsg}
-          accuracy={accuracy}
-          exercise={selectedExercise}
-          isCalibrated={isCalibrated}
-        />
+      {/* Main Webcam Area - 70-80% of width */}
+      <div className="col-12 col-lg-9 d-flex flex-column gap-3">
+        {/* Webcam Feed */}
+        <div className="flex-grow-1">
+          <WebcamPanel 
+            isActive={cameraActive}
+            isPaused={isPaused}
+            onStart={enableCamera}
+            reps={reps}
+            statusMsg={statusMsg}
+            accuracy={accuracy}
+            exercise={selectedExercise}
+            isCalibrated={isCalibrated}
+          />
+        </div>
 
-        {/* Bottom Controls Panel */}
+        {/* Bottom Control Panel */}
         <div 
-          className="d-flex justify-content-center align-items-center gap-3 p-3 rounded-4 shadow-sm border" 
-          style={{ background: 'var(--color-surface-container)', minHeight: '80px' }}
+          className="d-flex justify-content-center align-items-center gap-3 p-3 rounded-3 border" 
+          style={{ background: 'var(--color-surface-container)', minHeight: '70px' }}
         >
           {!cameraActive ? (
             <Button 
@@ -95,19 +97,19 @@ export default function LiveMonitoringPage() {
               variant="primary" 
               icon="videocam" 
               onClick={enableCamera} 
-              className="px-5 shadow-primary"
+              className="px-5"
             >
               Start Camera & Tracking
             </Button>
           ) : (
-            <div className="d-flex gap-3">
+            <div className="d-flex gap-3 w-100 justify-content-center">
               {isPaused ? (
                 <Button 
                   size="lg" 
                   variant="secondary" 
                   icon="play_arrow" 
                   onClick={resumeSession} 
-                  className="px-4 bg-success text-white border-success hover-bg-success"
+                  className="px-4 bg-success text-white border-success"
                 >
                   Resume
                 </Button>
@@ -117,7 +119,7 @@ export default function LiveMonitoringPage() {
                   variant="secondary" 
                   icon="pause" 
                   onClick={pauseSession} 
-                  className="px-4 bg-warning text-dark border-warning hover-bg-warning"
+                  className="px-4 bg-warning text-dark border-warning"
                 >
                   Pause
                 </Button>
@@ -127,7 +129,7 @@ export default function LiveMonitoringPage() {
                 variant="outline-white" 
                 icon="stop" 
                 onClick={handleEndSession} 
-                className="px-4 bg-danger text-white border-danger hover-bg-danger"
+                className="px-4 bg-danger text-white border-danger"
               >
                 Stop
               </Button>
@@ -136,8 +138,8 @@ export default function LiveMonitoringPage() {
         </div>
       </div>
 
-      {/* Sidebar Metrics & Logs */}
-      <div className="col-12 col-xl-4">
+      {/* Feedback Sidebar - 20-30% of width */}
+      <div className="col-12 col-lg-3" style={{ minHeight: '100vh', overflowY: 'auto' }}>
         <FeedbackPanel 
           exercise={selectedExercise}
           reps={reps}

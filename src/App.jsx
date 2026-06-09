@@ -4,6 +4,7 @@ import { ROUTES } from './utils/constants';
 import { AuthProvider } from './context/AuthContext';
 import { ExerciseProvider } from './context/ExerciseContext';
 import { SessionProvider } from './context/SessionContext';
+import { VoiceCoachProvider } from './context/VoiceCoachContext';
 import ErrorBoundary from './components/ErrorBoundary';
 
 import PublicLayout from './layouts/PublicLayout';
@@ -26,7 +27,8 @@ function App() {
       <AuthProvider>
         <ExerciseProvider>
           <SessionProvider>
-            <BrowserRouter>
+            <VoiceCoachProvider>
+              <BrowserRouter>
           <Routes>
             {/* Public Routes */}
             <Route element={<PublicLayout />}>
@@ -48,7 +50,8 @@ function App() {
             {/* Catch all 404 - redirect to home */}
             <Route path="*" element={<LandingPage />} />
           </Routes>
-          </BrowserRouter>
+              </BrowserRouter>
+            </VoiceCoachProvider>
         </SessionProvider>
       </ExerciseProvider>
     </AuthProvider>
