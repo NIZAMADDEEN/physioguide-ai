@@ -9,7 +9,7 @@ import { useEffect } from 'react';
  * @param {string} selector - CSS selector for children to animate (default: '.scroll-reveal')
  * @param {number} threshold - visibility threshold 0–1 (default: 0.1)
  */
-export function useScrollReveal(containerRef, selector = '.scroll-reveal', threshold = 0.1) {
+export function useScrollReveal(containerRef, selector = '.scroll-reveal', threshold = 0.1, dependencies = []) {
   useEffect(() => {
     const container = containerRef?.current;
     if (!container) return;
@@ -32,5 +32,5 @@ export function useScrollReveal(containerRef, selector = '.scroll-reveal', thres
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [containerRef, selector, threshold]);
+  }, [containerRef, selector, threshold, ...dependencies]);
 }
