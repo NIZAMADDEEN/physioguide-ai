@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSession } from '../hooks/useSession';
+import { processFrame } from '../services/sessionService';
 import Card from './common/Card';
 import Button from './common/Button';
 
@@ -14,9 +16,14 @@ export default function WebcamPanel({
 }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const offscreenCanvasRef = useRef(document.createElement('canvas'));
   const [hasWebcam, setHasWebcam] = useState(null);
   const [stream, setStream] = useState(null);
+  const [lastCVResult, setLastCVResult] = useState(null);
+  const cvProcessingRef = useRef(false);
   
+  const { handleFrameResult, activeSession } = useSession();
+
   // Track animation time so it can freeze on pause
   const animTimeRef = useRef(0);
   const lastFrameTimeRef = useRef(0);
@@ -60,6 +67,42 @@ export default function WebcamPanel({
       }
     };
   }, [isActive]);
+
+  // ─── Frame Extraction & Processing Loop ─────────────────────────────────────
+  useEffect(() => {
+    if (!isActive || isPaused || hasWebcam === false) return;
+    
+    const interval = setInterval(async () => {
+      if (cvProcessingRef.current) return;
+      const video = videoRef.current;
+      if (!video || video.readyState !== 4) return;
+      
+      try {
+        cvProcessingRef.current = true;
+        
+        const canvas = offscreenCanvasRef.current;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+        const base64Str = dataUrl.split(',')[1];
+        
+        if (activeSession?.sessionId && exercise?.id) {
+          const result = await processFrame(activeSession.sessionId, exercise.id, base64Str);
+          setLastCVResult(result);
+          handleFrameResult(result);
+        }
+      } catch (err) {
+        console.warn('CV processing error:', err);
+      } finally {
+        cvProcessingRef.current = false;
+      }
+    }, 150); // ~6.6 FPS
+    
+    return () => clearInterval(interval);
+  }, [isActive, isPaused, hasWebcam, activeSession, exercise, handleFrameResult]);
 
   // ─── Skeletal Joint Animation & Rendering Loop ─────────────────────────────
   useEffect(() => {
@@ -149,114 +192,65 @@ export default function WebcamPanel({
       }
 
       // ─── Calculate Joints Coordinates ─────────────────────────────────────
-      // Let's create an animated model of joints
-      const t = (animTimeRef.current % 4500) / 4500; // 0 to 1 cycle
-      const phase = t < 0.5 ? t * 2 : (1 - t) * 2; // Triangle wave 0 -> 1 -> 0
-
-      // Base skeletal coordinates
-      let head = { x: 320, y: 110 };
-      let neck = { x: 320, y: 160 };
-      let lShoulder = { x: 260, y: 170 };
-      let rShoulder = { x: 380, y: 170 };
-      let lHip = { x: 280, y: 300 };
-      let rHip = { x: 360, y: 300 };
-
-      let lElbow = { x: 220, y: 230 };
-      let rElbow = { x: 420, y: 230 };
-      let lWrist = { x: 210, y: 300 };
-      let rWrist = { x: 430, y: 300 };
-
-      let lKnee = { x: 280, y: 370 };
-      let rKnee = { x: 360, y: 370 };
-      let lAnkle = { x: 280, y: 440 };
-      let rAnkle = { x: 360, y: 440 };
-
+      let head, neck, lShoulder, rShoulder, lElbow, rElbow, lWrist, rWrist, lHip, rHip, lKnee, rKnee, lAnkle, rAnkle;
       let leftAngle = null;
       let rightAngle = null;
-      let targetJointLabel = '';
-
-      const exName = exercise?.name || '';
+      let targetJointLabel = 'Joint Align';
       
-      if (exName.toLowerCase().includes('squat')) {
-        // Squat: Hips go down, knees bend outwards, ankles fixed
-        targetJointLabel = 'Knee Flexion';
-        const hipDrop = phase * 45;
-        const kneeOut = phase * 20;
-
-        lHip.y += hipDrop;
-        rHip.y += hipDrop;
-        lHip.x -= kneeOut * 0.3;
-        rHip.x += kneeOut * 0.3;
-
-        lKnee.y += hipDrop * 0.4;
-        rKnee.y += hipDrop * 0.4;
-        lKnee.x -= kneeOut;
-        rKnee.x += kneeOut;
-
-        // Neck & Head follow hips slightly
-        neck.y += hipDrop * 0.7;
-        head.y += hipDrop * 0.7;
-        lShoulder.y += hipDrop * 0.7;
-        rShoulder.y += hipDrop * 0.7;
-        lElbow.y += hipDrop * 0.7;
-        rElbow.y += hipDrop * 0.7;
-        lWrist.y += hipDrop * 0.7;
-        rWrist.y += hipDrop * 0.7;
-
-        // Angle goes from ~170 deg to ~92 deg
-        leftAngle = Math.round(175 - phase * 83);
-        rightAngle = leftAngle;
-      } 
-      else if (exName.toLowerCase().includes('curl') || exName.toLowerCase().includes('bicep')) {
-        // Bicep Curl: Elbow bends, hand wrist moves up towards shoulder
-        targetJointLabel = 'Elbow Angle';
-        
-        // Left arm curls
-        lElbow = { x: 230, y: 240 };
-        const leftCurlY = phase * 90;
-        const leftCurlX = phase * 25;
-        lWrist.x = lElbow.x - 10 + leftCurlX;
-        lWrist.y = lElbow.y + 60 - leftCurlY;
-
-        // Right arm curls
-        rElbow = { x: 410, y: 240 };
-        const rightCurlY = phase * 90;
-        const rightCurlX = phase * 25;
-        rWrist.x = rElbow.x + 10 - rightCurlX;
-        rWrist.y = rElbow.y + 60 - rightCurlY;
-
-        // Angle goes from 165 down to 50
-        leftAngle = Math.round(165 - phase * 115);
-        rightAngle = leftAngle;
-      } 
-      else if (exName.toLowerCase().includes('press') || exName.toLowerCase().includes('shoulder')) {
-        // Shoulder Press: Elbows extend outwards & upwards, hands push skyward
-        targetJointLabel = 'Shoulder Extension';
-        
-        // Start position: elbow bent at side, hand at shoulder height
-        // End position: hand fully straight overhead
-        const ext = phase; // 0 (start/bent) -> 1 (full press)
-        
-        lElbow = { x: 210 + ext * 35, y: 220 - ext * 50 };
-        rElbow = { x: 430 - ext * 35, y: 220 - ext * 50 };
-        
-        lWrist = { x: 210 + ext * 60, y: 150 - ext * 90 };
-        rWrist = { x: 430 - ext * 60, y: 150 - ext * 90 };
-
-        // Angle goes from 80 deg (start) to 175 deg (finish)
-        leftAngle = Math.round(80 + ext * 95);
-        rightAngle = leftAngle;
-      }
-      else {
-        // Default idle sway
-        const sway = Math.sin(now / 500) * 8;
-        head.x += sway * 0.5;
-        neck.x += sway * 0.5;
-        lWrist.y += sway;
-        rWrist.y -= sway;
-        leftAngle = 175;
-        rightAngle = 175;
-        targetJointLabel = 'Joint Align';
+      const landmarks = lastCVResult?.landmarks;
+      if (landmarks && lastCVResult.poseDetected) {
+         const getPt = (lm) => lm ? { x: lm.x * canvas.width, y: lm.y * canvas.height } : null;
+         
+         head = getPt(landmarks['NOSE']);
+         lShoulder = getPt(landmarks['LEFT_SHOULDER']);
+         rShoulder = getPt(landmarks['RIGHT_SHOULDER']);
+         if (lShoulder && rShoulder) {
+           neck = { x: (lShoulder.x + rShoulder.x)/2, y: (lShoulder.y + rShoulder.y)/2 };
+         }
+         
+         lElbow = getPt(landmarks['LEFT_ELBOW']);
+         rElbow = getPt(landmarks['RIGHT_ELBOW']);
+         lWrist = getPt(landmarks['LEFT_WRIST']);
+         rWrist = getPt(landmarks['RIGHT_WRIST']);
+         lHip = getPt(landmarks['LEFT_HIP']);
+         rHip = getPt(landmarks['RIGHT_HIP']);
+         lKnee = getPt(landmarks['LEFT_KNEE']);
+         rKnee = getPt(landmarks['RIGHT_KNEE']);
+         lAnkle = getPt(landmarks['LEFT_ANKLE']);
+         rAnkle = getPt(landmarks['RIGHT_ANKLE']);
+         
+         const angles = lastCVResult?.angles || {};
+         const exId = exercise?.id || '';
+         if (exId.includes('squat') || exId.includes('flexion')) {
+           leftAngle = angles['left_knee'] ? Math.round(angles['left_knee']) : null;
+           rightAngle = angles['right_knee'] ? Math.round(angles['right_knee']) : null;
+           targetJointLabel = 'Knee Flexion';
+         } else if (exId.includes('curl') || exId.includes('bicep')) {
+           leftAngle = angles['left_elbow'] ? Math.round(angles['left_elbow']) : null;
+           rightAngle = angles['right_elbow'] ? Math.round(angles['right_elbow']) : null;
+           targetJointLabel = 'Elbow Angle';
+         } else if (exId.includes('press') || exId.includes('shoulder') || exId.includes('raise') || exId.includes('abduction')) {
+           leftAngle = angles['left_shoulder'] ? Math.round(angles['left_shoulder']) : null;
+           rightAngle = angles['right_shoulder'] ? Math.round(angles['right_shoulder']) : null;
+           targetJointLabel = 'Shoulder Angle';
+         } else {
+           const key = Object.keys(angles)[0];
+           if (key) {
+             leftAngle = Math.round(angles[key]);
+             rightAngle = leftAngle;
+             targetJointLabel = key.replace('_', ' ').toUpperCase();
+           }
+         }
+      } else {
+         // Fallback/idle (when no pose is detected)
+         head = { x: 320, y: 110 };
+         neck = { x: 320, y: 160 };
+         lShoulder = { x: 260, y: 170 }; rShoulder = { x: 380, y: 170 };
+         lElbow = { x: 260, y: 250 }; rElbow = { x: 380, y: 250 };
+         lWrist = { x: 260, y: 320 }; rWrist = { x: 380, y: 320 };
+         lHip = { x: 280, y: 300 }; rHip = { x: 360, y: 300 };
+         lKnee = { x: 280, y: 400 }; rKnee = { x: 360, y: 400 };
+         lAnkle = { x: 280, y: 460 }; rAnkle = { x: 360, y: 460 };
       }
 
       // ─── Draw Skeleton Lines (Bones) ──────────────────────────────────────
@@ -268,51 +262,39 @@ export default function WebcamPanel({
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
-      // Face/Head mesh
-      ctx.beginPath();
-      ctx.arc(head.x, head.y, 25, 0, Math.PI * 2);
-      ctx.stroke();
+      const drawLine = (pt1, pt2) => {
+        if (pt1 && pt2) {
+          ctx.beginPath();
+          ctx.moveTo(pt1.x, pt1.y);
+          ctx.lineTo(pt2.x, pt2.y);
+          ctx.stroke();
+        }
+      };
 
-      // Spine & Shoulders
-      ctx.beginPath();
-      ctx.moveTo(head.x, head.y + 25);
-      ctx.lineTo(neck.x, neck.y); // head to neck
-      ctx.lineTo(lShoulder.x, lShoulder.y); // neck to left shoulder
-      ctx.moveTo(neck.x, neck.y);
-      ctx.lineTo(rShoulder.x, rShoulder.y); // neck to right shoulder
-      ctx.stroke();
+      if (head) {
+        ctx.beginPath();
+        ctx.arc(head.x, head.y, 25, 0, Math.PI * 2);
+        ctx.stroke();
+      }
 
-      // Torso
-      ctx.beginPath();
-      ctx.moveTo(lShoulder.x, lShoulder.y);
-      ctx.lineTo(lHip.x, lHip.y);
-      ctx.moveTo(rShoulder.x, rShoulder.y);
-      ctx.lineTo(rHip.x, rHip.y);
-      ctx.moveTo(lHip.x, lHip.y);
-      ctx.lineTo(rHip.x, rHip.y);
-      ctx.stroke();
+      drawLine(head, neck);
+      drawLine(neck, lShoulder);
+      drawLine(neck, rShoulder);
 
-      // Arms
-      ctx.beginPath();
-      ctx.moveTo(lShoulder.x, lShoulder.y);
-      ctx.lineTo(lElbow.x, lElbow.y);
-      ctx.lineTo(lWrist.x, lWrist.y);
+      drawLine(lShoulder, lHip);
+      drawLine(rShoulder, rHip);
+      drawLine(lHip, rHip);
+
+      drawLine(lShoulder, lElbow);
+      drawLine(lElbow, lWrist);
+      drawLine(rShoulder, rElbow);
+      drawLine(rElbow, rWrist);
+
+      drawLine(lHip, lKnee);
+      drawLine(lKnee, lAnkle);
+      drawLine(rHip, rKnee);
+      drawLine(rKnee, rAnkle);
       
-      ctx.moveTo(rShoulder.x, rShoulder.y);
-      ctx.lineTo(rElbow.x, rElbow.y);
-      ctx.lineTo(rWrist.x, rWrist.y);
-      ctx.stroke();
-
-      // Legs
-      ctx.beginPath();
-      ctx.moveTo(lHip.x, lHip.y);
-      ctx.lineTo(lKnee.x, lKnee.y);
-      ctx.lineTo(lAnkle.x, lAnkle.y);
-
-      ctx.moveTo(rHip.x, rHip.y);
-      ctx.lineTo(rKnee.x, rKnee.y);
-      ctx.lineTo(rAnkle.x, rAnkle.y);
-      ctx.stroke();
       ctx.restore();
 
       // ─── Draw Joint Nodes (Landmarks) ─────────────────────────────────────
@@ -327,18 +309,20 @@ export default function WebcamPanel({
       ];
 
       joints.forEach((joint) => {
-        ctx.save();
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = statusColor;
-        ctx.lineWidth = 3;
-        ctx.shadowColor = glowColor;
-        ctx.shadowBlur = 8;
-        
-        ctx.beginPath();
-        ctx.arc(joint.x, joint.y, 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.restore();
+        if (joint) {
+          ctx.save();
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = statusColor;
+          ctx.lineWidth = 3;
+          ctx.shadowColor = glowColor;
+          ctx.shadowBlur = 8;
+          
+          ctx.beginPath();
+          ctx.arc(joint.x, joint.y, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
       });
 
       // ─── Draw Angle Readouts and Arcs ──────────────────────────────────────
@@ -348,18 +332,20 @@ export default function WebcamPanel({
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
         ctx.lineWidth = 1.5;
         
+        const exIdStr = exercise?.id || '';
+
         // Draw Left joint indicator box & text
         let indicatorX = 0;
         let indicatorY = 0;
         
-        if (exName.toLowerCase().includes('squat')) {
+        if (exIdStr.includes('squat')) {
           indicatorX = lKnee.x - 70;
           indicatorY = lKnee.y;
           // Draw arc at knee
           ctx.beginPath();
           ctx.arc(lKnee.x, lKnee.y, 25, 0.7 * Math.PI, 1.3 * Math.PI);
           ctx.stroke();
-        } else if (exName.toLowerCase().includes('press')) {
+        } else if (exIdStr.includes('press')) {
           indicatorX = lElbow.x - 70;
           indicatorY = lElbow.y;
           ctx.beginPath();
@@ -393,13 +379,13 @@ export default function WebcamPanel({
         let indicatorRX = 0;
         let indicatorRY = 0;
         
-        if (exName.toLowerCase().includes('squat')) {
+        if (exIdStr.includes('squat')) {
           indicatorRX = rKnee.x + 12;
           indicatorRY = rKnee.y;
           ctx.beginPath();
           ctx.arc(rKnee.x, rKnee.y, 25, 1.7 * Math.PI, 0.3 * Math.PI);
           ctx.stroke();
-        } else if (exName.toLowerCase().includes('press')) {
+        } else if (exIdStr.includes('press')) {
           indicatorRX = rElbow.x + 12;
           indicatorRY = rElbow.y;
           ctx.beginPath();
@@ -452,7 +438,7 @@ export default function WebcamPanel({
 
     animId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animId);
-  }, [isActive, isPaused, accuracy, exercise, isCalibrated]);
+  }, [isActive, isPaused, accuracy, exercise, isCalibrated, lastCVResult]);
 
   return (
     <Card

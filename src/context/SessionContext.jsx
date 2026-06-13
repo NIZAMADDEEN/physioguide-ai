@@ -11,6 +11,7 @@ import {
   getTimeline,
   getSummaryStats,
   getExerciseDistribution,
+  startTracker
 } from '../services/sessionService';
 
 export const SessionContext = createContext(null);
@@ -137,97 +138,94 @@ export function SessionProvider({ children }) {
     return () => clearInterval(stopwatch);
   }, [cameraActive, activeSession, isPaused]);
 
-  // ─── Posture Simulation Loop (runs while camera is active and not paused) ─
-  useEffect(() => {
-    if (!cameraActive || !activeSession || isPaused) return;
+  // ─── Handle Real-Time Frame Results from CV API ──────────────────────────
+  const handleFrameResult = useCallback((result) => {
+    if (isPaused) return;
 
-    if (!isCalibrated) {
-      setStatusMsg('Calibrating posture...');
-      const calibTimer = setTimeout(() => {
-        setStatusMsg('Good form! Keep going.');
-        setAccuracy(88);
-        setAccuracyHistory((prev) => [...prev, 88]);
-        setIsCalibrated(true);
-        setSuccessNotifications((prev) => [
-          {
-            id: `calib-${Date.now()}`,
-            text: 'System Calibrated. Tracking active!',
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-            type: 'system',
-          },
-          ...prev,
-        ]);
-      }, 2000);
-      return () => clearTimeout(calibTimer);
+    // Handle initial calibration state
+    if (!isCalibrated && result.poseDetected) {
+      setIsCalibrated(true);
+      setStatusMsg('System Calibrated. Tracking active!');
+      setSuccessNotifications((prev) => [
+        {
+          id: `calib-${Date.now()}`,
+          text: 'System Calibrated. Tracking active!',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          type: 'system',
+        },
+        ...prev,
+      ]);
+    } else if (!isCalibrated && !result.poseDetected) {
+      setStatusMsg('Calibrating posture... Please stand in frame.');
+      return;
     }
 
-    const simInterval = setInterval(() => {
-      setReps((r) => {
-        const next = r + 1;
-        let currentAccuracy;
-        let nextMsg;
-        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    if (!result.poseDetected) {
+      setStatusMsg('No pose detected. Step back.');
+      return;
+    }
 
-        if (next % 3 === 0) {
-          nextMsg = 'Adjust your knee angle slightly.';
-          currentAccuracy = Math.floor(Math.random() * 20) + 70; // 70–90%
-          
-          setCorrections((prev) => [
+    // Update Reps
+    if (result.reps > reps) {
+      setReps(result.reps);
+      // New rep completed!
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      setSuccessNotifications((prev) => [
+        {
+          id: `rep-${result.reps}-${Date.now()}`,
+          text: result.milestone || `Rep ${result.reps} complete.`,
+          timestamp: timeStr,
+          type: 'rep',
+        },
+        ...prev.slice(0, 4),
+      ]);
+      // Clear older corrections to simulate form correction success
+      setCorrections((prev) => prev.filter((_, idx) => idx > 0));
+    }
+
+    // Update Accuracy and Msg
+    setAccuracy(result.frameAccuracy);
+    setAccuracyHistory((prev) => [...prev, result.frameAccuracy]);
+    
+    // Process Feedback
+    if (result.feedback && result.feedback.length > 0) {
+      // Just take the first active feedback message
+      const latestFb = result.feedback[0];
+      
+      // Only show error/warnings or explicit info from backend
+      if (latestFb.type === 'warning' || latestFb.type === 'error') {
+        setStatusMsg(latestFb.message);
+        setCorrections((prev) => {
+          // Avoid duplicate rapid-fire corrections
+          if (prev.length > 0 && prev[0].text === latestFb.message) {
+            return prev;
+          }
+          return [
             {
               id: `corr-${Date.now()}`,
-              text: 'Knee extension off by 12 degrees. Raise hips slightly.',
-              timestamp: timeStr,
-              severity: 'warning',
+              text: latestFb.message,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+              severity: latestFb.type,
             },
             ...prev.slice(0, 4),
-          ]);
-        } else {
-          nextMsg = 'Great! Maintain this pace.';
-          currentAccuracy = Math.floor(Math.random() * 12) + 88; // 88–100%
-          
-          // Clear older corrections to simulate form correction success
-          setCorrections((prev) => prev.filter((_, idx) => idx > 0));
-          
-          setSuccessNotifications((prev) => [
-            {
-              id: `rep-${next}-${Date.now()}`,
-              text: `Rep ${next} complete: Excellent depth and alignment (${currentAccuracy}% accuracy).`,
-              timestamp: timeStr,
-              type: 'rep',
-            },
-            ...prev.slice(0, 4),
-          ]);
-        }
-
-        setStatusMsg(nextMsg);
-        setAccuracy(currentAccuracy);
-        setAccuracyHistory((prev) => [...prev, currentAccuracy]);
-
-        // Fire-and-forget periodic metric update to Flask backend
-        if (activeSession?.sessionId) {
-          updateSessionMetrics(activeSession.sessionId, {
-            reps: next,
-            accuracy: currentAccuracy,
-            statusMsg: nextMsg,
-          }).catch((err) =>
-            console.warn('[SessionContext] Metric update failed:', err.message)
-          );
-        }
-
-        return next;
-      });
-    }, 4500);
-
-    return () => {
-      clearInterval(simInterval);
-    };
-  }, [cameraActive, activeSession, isPaused, isCalibrated]);
+          ];
+        });
+      } else {
+         setStatusMsg('Great! Maintain this pace.');
+      }
+    } else {
+      setStatusMsg('Great! Maintain this pace.');
+    }
+  }, [isPaused, isCalibrated, reps]);
 
   // ─── Start a new exercise session ──────────────────────────────────────────
   const startSession = useCallback(
     async (exerciseId, exerciseObj) => {
       try {
         const session = await startSessionApi(exerciseId);
+        // Initialize tracker in backend
+        await startTracker(session.sessionId, exerciseId);
+        
         selectExercise(exerciseObj);
         setActiveSession(session);
         setCameraActive(false);
@@ -415,6 +413,7 @@ export function SessionProvider({ children }) {
       endSession,
       clearSessionSummary,
       refreshAnalytics: loadAnalyticsData,
+      handleFrameResult, // Export for WebcamPanel
     }),
     [
       activeSession,
@@ -442,6 +441,7 @@ export function SessionProvider({ children }) {
       endSession,
       clearSessionSummary,
       loadAnalyticsData,
+      handleFrameResult,
     ]
   );
 

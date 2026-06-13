@@ -91,3 +91,26 @@ export async function getExerciseDistribution() {
   const response = await api.get('/analytics/distribution');
   return response.data;
 }
+
+/**
+ * Initializes the CV tracker for a session.
+ * @param {string} sessionId 
+ * @param {string} exerciseId 
+ * @returns {Promise<Object>} Tracker state
+ */
+export async function startTracker(sessionId, exerciseId) {
+  const response = await api.post('/cv/start-tracker', { sessionId, exerciseId });
+  return response.data;
+}
+
+/**
+ * Sends a base64 encoded video frame to the backend for CV processing.
+ * @param {string} sessionId 
+ * @param {string} exerciseId 
+ * @param {string} frame Base64 string (without data URL prefix)
+ * @returns {Promise<Object>} Tracking results (landmarks, angles, reps, etc.)
+ */
+export async function processFrame(sessionId, exerciseId, frame) {
+  const response = await api.post('/cv/process-frame', { sessionId, exerciseId, frame });
+  return response.data;
+}
