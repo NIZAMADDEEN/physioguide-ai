@@ -10,7 +10,9 @@ load_dotenv()
 from config import Config
 from database import db
 from models.exercise import Exercise
+from models.testimonial import Testimonial
 from routes import auth_bp, exercises_bp, sessions_bp, analytics_bp, reports_bp, cv_bp
+from routes.testimonials import testimonials_bp
 
 def create_app():
     app = Flask(__name__)
@@ -32,6 +34,7 @@ def create_app():
     app.register_blueprint(analytics_bp,  url_prefix='/api/analytics')
     app.register_blueprint(reports_bp,    url_prefix='/api/reports')
     app.register_blueprint(cv_bp,         url_prefix='/api/cv')
+    app.register_blueprint(testimonials_bp, url_prefix='/api/testimonials')
 
     @app.route('/health', methods=['GET'])
     def health_check():
@@ -83,6 +86,8 @@ def seed_exercises():
         db.session.add(ex)
     db.session.commit()
     print("[Seeding] Database successfully seeded with default therapy exercises.")
+
+
 
 if __name__ == '__main__':
     app = create_app()
