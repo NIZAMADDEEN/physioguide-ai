@@ -1,96 +1,44 @@
-import { useRef } from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
-
-const features = [
-  {
-    id: 'pose-detection',
-    icon: 'accessibility_new',
-    title: 'Real-Time Pose Detection',
-    description:
-      'Instantly identifies postural errors and provides immediate correction cues.',
-  },
-  {
-    id: 'exercise-tracking',
-    icon: 'track_changes',
-    title: 'Exercise Accuracy Tracking',
-    description:
-      'Monitor range of motion and rep quality with sub-degree accuracy.',
-  },
-  {
-    id: 'progress-analytics',
-    icon: 'analytics',
-    title: 'Progress Analytics',
-    description:
-      'Data-driven insights into your recovery journey with predictive healing timelines.',
-  },
-  {
-    id: 'therapist-reports',
-    icon: 'clinical_notes',
-    title: 'Therapist Reports',
-    description:
-      'Seamlessly share recovery data with your clinic for expert review.',
-  },
-];
-
-/**
- * FeaturesSection
- * 4-column card grid showcasing core product capabilities.
- */
 export default function FeaturesSection() {
-  const sectionRef = useRef(null);
-  useScrollReveal(sectionRef);
-
   return (
-    <section
-      ref={sectionRef}
-      id="features"
-      className="py-5 bg-white"
-      style={{ paddingBlock: 'var(--space-xl)' }}
-      aria-labelledby="features-heading"
-    >
-      <div className="pg-container">
-        {/* Section header */}
-        <div className="text-center mb-5 scroll-reveal">
-          <h2
-            id="features-heading"
-            className="text-headline-lg text-on-surface mb-2"
-          >
-            Clinically Precise Features
-          </h2>
-          <p
-            className="text-body-md text-on-surface-variant mx-auto"
-            style={{ maxWidth: '560px' }}
-          >
-            Our technology bridges the gap between clinic visits and home recovery.
-          </p>
+    <section className="py-xl md:py-32 bg-white scroll-reveal" id="features">
+      <div className="max-w-container-max mx-auto px-margin-mobile md:px-xl">
+        <div className="text-center space-y-xs mb-xl scroll-reveal">
+          <h2 className="text-headline-lg font-headline-lg text-on-surface">Clinically Precise Features</h2>
+          <p className="text-body-md text-on-surface-variant max-w-2xl mx-auto">Our technology bridges the gap between clinic visits and home recovery.</p>
         </div>
-
-        {/* Cards grid */}
-        <div className="row g-4">
-          {features.map((feature) => (
-            <div key={feature.id} className="col-12 col-md-6 col-lg-3 scroll-reveal">
-              <article
-                className="feature-card"
-                aria-labelledby={`feature-${feature.id}-title`}
-              >
-                <div
-                  className="feature-icon-wrap"
-                  aria-hidden="true"
-                >
-                  <span className="material-symbols-outlined">{feature.icon}</span>
-                </div>
-                <h3
-                  id={`feature-${feature.id}-title`}
-                  className="text-headline-md text-on-surface mb-2"
-                >
-                  {feature.title}
-                </h3>
-                <p className="text-body-md text-on-surface-variant mb-0">
-                  {feature.description}
-                </p>
-              </article>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          {/* Feature 1 */}
+          <div className="p-lg rounded-xl border border-outline-variant bg-surface hover:shadow-lg hover:border-primary/30 transition-all group scroll-reveal">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+              <span className="material-symbols-outlined">accessibility_new</span>
             </div>
-          ))}
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Real-Time Pose Detection</h3>
+            <p className="text-body-md text-on-surface-variant">Instantly identifies postural errors and provides immediate correction cues.</p>
+          </div>
+          {/* Feature 2 */}
+          <div className="p-lg rounded-xl border border-outline-variant bg-surface hover:shadow-lg hover:border-primary/30 transition-all group scroll-reveal">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+              <span className="material-symbols-outlined">track_changes</span>
+            </div>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Exercise Accuracy Tracking</h3>
+            <p className="text-body-md text-on-surface-variant">Monitor range of motion and rep quality with sub-degree accuracy.</p>
+          </div>
+          {/* Feature 3 */}
+          <div className="p-lg rounded-xl border border-outline-variant bg-surface hover:shadow-lg hover:border-primary/30 transition-all group scroll-reveal">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+              <span className="material-symbols-outlined">analytics</span>
+            </div>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Progress Analytics</h3>
+            <p className="text-body-md text-on-surface-variant">Data-driven insights into your recovery journey with predictive healing timelines.</p>
+          </div>
+          {/* Feature 4 */}
+          <div className="p-lg rounded-xl border border-outline-variant bg-surface hover:shadow-lg hover:border-primary/30 transition-all group scroll-reveal">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+              <span className="material-symbols-outlined">clinical_notes</span>
+            </div>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Therapist Reports</h3>
+            <p className="text-body-md text-on-surface-variant">Seamlessly share recovery data with your clinic for expert review.</p>
+          </div>
         </div>
       </div>
     </section>

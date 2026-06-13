@@ -1,97 +1,49 @@
-import { useRef } from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
-
-// Progress dashboard image from Stitch source
-const HOW_IMAGE =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDvDQeltTTS3N9p1TPJWTnCAIEg7zC0H75LRgAAIvqrMztDeKsXscHrpZ1wSKYzJY2TeHbCmF_Xq5JGyTmKybo2tJpwDVFdzkeYamLY8qd8R_FYwd3jqsWtY0AMpxlHjfXiCRHbOscljt5Y7dILqqPOg2C7GR2FxYTMqi8QD_XYBMkx8psIVOPQrevWOrS4DIszLPrmeA--D9vdEfMazyLkPgEYXmpNFdyUG1iuV9jFCd1LE75dMD1SMNjuhGfr0mUX-IpeQFcq9nwZ';
-
-const steps = [
-  {
-    number: 1,
-    title: 'Select Exercise',
-    description:
-      'Choose from a library of personalized routines tailored to your specific injury and fitness level.',
-  },
-  {
-    number: 2,
-    title: 'Start Camera',
-    description:
-      'No extra hardware needed, just your laptop or phone. Our AI works directly through your browser.',
-  },
-  {
-    number: 3,
-    title: 'Receive Feedback',
-    description:
-      'Get audio and visual cues for correct form, just like having a therapist standing beside you.',
-  },
-  {
-    number: 4,
-    title: 'Track Progress',
-    description:
-      'Watch your mobility improve with every session through interactive charts and strength metrics.',
-  },
-];
-
-/**
- * HowItWorksSection
- * Left: numbered steps list. Right: product screenshot panel.
- */
 export default function HowItWorksSection() {
-  const sectionRef = useRef(null);
-  useScrollReveal(sectionRef);
-
   return (
-    <section
-      ref={sectionRef}
-      id="how-it-works"
-      className="how-section"
-      aria-labelledby="how-heading"
-    >
-      <div className="pg-container">
-        <div className="row align-items-center g-5">
-          {/* --- Steps column --- */}
-          <div className="col-12 col-lg-6 scroll-reveal">
-            <h2
-              id="how-heading"
-              className="text-headline-lg text-on-surface mb-4"
-            >
-              Simple Path to Recovery
-            </h2>
-
-            <ol
-              className="list-unstyled d-flex flex-column"
-              style={{ gap: 'var(--space-lg)' }}
-              aria-label="Recovery steps"
-            >
-              {steps.map((step) => (
-                <li key={step.number} className="d-flex align-items-start gap-3">
-                  <div
-                    className="step-number"
-                    aria-hidden="true"
-                  >
-                    {step.number}
-                  </div>
-                  <div>
-                    <h3 className="text-headline-md text-on-surface mb-1">
-                      {step.title}
-                    </h3>
-                    <p className="text-body-md text-on-surface-variant mb-0">
-                      {step.description}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+    <section className="py-xl md:py-32 bg-surface-container-lowest scroll-reveal" id="how-it-works">
+      <div className="max-w-container-max mx-auto px-margin-mobile md:px-xl">
+        <div className="flex flex-col lg:flex-row items-center gap-xl">
+          <div className="lg:w-1/2 scroll-reveal">
+            <h2 className="text-headline-lg font-headline-lg text-on-surface mb-lg">Simple Path to Recovery</h2>
+            <div className="space-y-lg">
+              {/* Step 1 */}
+              <div className="flex gap-md">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold">1</div>
+                <div>
+                  <h4 className="font-headline-md text-headline-md mb-xs">Select Exercise</h4>
+                  <p className="text-on-surface-variant">Choose from a library of personalized routines tailored to your specific injury and fitness level.</p>
+                </div>
+              </div>
+              {/* Step 2 */}
+              <div className="flex gap-md">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold">2</div>
+                <div>
+                  <h4 className="font-headline-md text-headline-md mb-xs">Start Camera</h4>
+                  <p className="text-on-surface-variant">No extra hardware needed, just your laptop or phone. Our AI works directly through your browser.</p>
+                </div>
+              </div>
+              {/* Step 3 */}
+              <div className="flex gap-md">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold">3</div>
+                <div>
+                  <h4 className="font-headline-md text-headline-md mb-xs">Receive Feedback</h4>
+                  <p className="text-on-surface-variant">Get audio and visual cues for correct form, just like having a therapist standing beside you.</p>
+                </div>
+              </div>
+              {/* Step 4 */}
+              <div className="flex gap-md">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold">4</div>
+                <div>
+                  <h4 className="font-headline-md text-headline-md mb-xs">Track Progress</h4>
+                  <p className="text-on-surface-variant">Watch your mobility improve with every session through interactive charts and strength metrics.</p>
+                </div>
+              </div>
+            </div>
           </div>
-
-          {/* --- Image column --- */}
-          <div className="col-12 col-lg-6 scroll-reveal" style={{ transitionDelay: '0.2s' }}>
-            <div className="how-image-panel">
-              <img
-                src={HOW_IMAGE}
-                alt="A tablet displaying a teal and blue health dashboard with recovery progress rings and line graphs in a bright home office"
-                loading="lazy"
-              />
+          <div className="lg:w-1/2 w-full scroll-reveal" style={{ transitionDelay: '0.15s' }}>
+            <div className="bg-primary/5 rounded-2xl p-lg relative overflow-hidden">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
+              <img alt="User tracking progress on laptop" className="rounded-xl shadow-xl w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvDQeltTTS3N9p1TPJWTnCAIEg7zC0H75LRgAAIvqrMztDeKsXscHrpZ1wSKYzJY2TeHbCmF_Xq5JGyTmKybo2tJpwDVFdzkeYamLY8qd8R_FYwd3jqsWtY0AMpxlHjfXiCRHbOscljt5Y7dILqqPOg2C7GR2FxYTMqi8QD_XYBMkx8psIVOPQrevWOrS4DIszLPrmeA--D9vdEfMazyLkPgEYXmpNFdyUG1iuV9jFCd1LE75dMD1SMNjuhGfr0mUX-IpeQFcq9nwZ"/>
             </div>
           </div>
         </div>

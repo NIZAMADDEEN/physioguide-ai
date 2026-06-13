@@ -1,126 +1,40 @@
-import { useRef } from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
-
-// Hero image — using the original Stitch source URL
-const HERO_IMAGE =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuAduGkzaiET5TGJxDJGaMhO2CujxyHyalhPs9cYTMvwtqqqUBT4CS8YeWoLKtupiMK_RhtiK3_QQ-S7U6zMqQn7zWkeyAXzn5ykJp7YewvxU5byiEaSyVuqze5U8PbhuK0fX5VDI1rKpsa5vjqnCzJEewu5xyI9x_5SS7DuCLCvO5Rqh1HibgHtYyOu1hPXWAdtg4z3E2zIHMRsnHOOp89TcY2TeSWCz-sxftH4JLGBSQAavGCvwThm3tp76F-2lUud5xZSawlx2PB0';
-
-/**
- * HeroSection
- * Two-column layout: text (left) + AI demo image (right).
- * Collapses to single column on mobile.
- */
 export default function HeroSection() {
-  const sectionRef = useRef(null);
-  useScrollReveal(sectionRef);
-
   return (
-    <section
-      ref={sectionRef}
-      className="hero-section hero-gradient"
-      aria-labelledby="hero-heading"
-    >
-      <div className="pg-container">
-        <div className="row align-items-center g-5">
-          {/* --- Text column --- */}
-          <div className="col-12 col-md-6 text-center text-md-start scroll-reveal">
-            {/* Badge */}
-            <div className="hero-badge d-inline-flex mb-3">
-              <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
-                verified_user
-              </span>
-              <span>Medical Grade AI Accuracy</span>
-            </div>
-
-            {/* Heading */}
-            <h1
-              id="hero-heading"
-              className="text-display-lg text-on-surface mb-4"
-              style={{ maxWidth: '560px', marginInline: 'auto' }}
-            >
-              Recover Smarter with{' '}
-              <span className="text-primary">AI Physiotherapy</span> Guidance
-            </h1>
-
-            {/* Sub-copy */}
-            <p
-              className="text-body-lg text-on-surface-variant mb-4"
-              style={{ maxWidth: '480px', marginInline: 'auto' }}
-            >
-              Professional rehabilitation from the comfort of home. Our AI monitors your form
-              in real-time using computer vision to ensure every rep counts.
-            </p>
-
-            {/* CTAs */}
-            <div
-              className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-md-start"
-              style={{ paddingTop: 'var(--space-sm)' }}
-            >
-              <button
-                className="btn-pg-primary"
-                id="hero-cta-primary"
-                aria-label="Start your recovery journey"
-                onClick={() =>
-                  document.querySelector('#features')?.scrollIntoView({ behavior: 'smooth' })
-                }
-              >
-                Start Recovery
-              </button>
-
-              <button
-                className="btn-pg-secondary"
-                id="hero-cta-demo"
-                aria-label="Watch a product demo"
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>
-                  play_circle
-                </span>
-                Watch Demo
-              </button>
-            </div>
+    <section className="relative overflow-hidden hero-gradient py-xl md:py-32">
+      <div className="max-w-container-max mx-auto px-margin-mobile md:px-xl flex flex-col md:flex-row items-center gap-xl scroll-reveal">
+        <div className="flex-1 text-center md:text-left space-y-md">
+          <div className="inline-flex items-center gap-xs bg-primary-container/10 text-primary px-sm py-xs rounded-full">
+            <span className="material-symbols-outlined text-[18px]">verified_user</span>
+            <span className="text-label-sm uppercase tracking-wider">Medical Grade AI Accuracy</span>
           </div>
-
-          {/* --- Image column --- */}
-          <div className="col-12 col-md-6 scroll-reveal" style={{ transitionDelay: '0.15s' }}>
-            <div className="hero-image-card">
-              <img
-                src={HERO_IMAGE}
-                alt="A woman performing a physiotherapy squat in a bright living room with a teal AI skeletal wireframe overlay tracking her joint angles in real time"
-                loading="eager"
-                fetchpriority="high"
-              />
-
-              {/* AI Active badge */}
-              <div className="hero-overlay-badge">
-                <div
-                  className="glass-card d-flex align-items-center gap-2"
-                  style={{ padding: '6px 10px', borderRadius: 'var(--radius-md)' }}
-                  aria-label="AI is actively analyzing pose"
-                >
-                  <div className="ai-pulse-dot" aria-hidden="true" />
-                  <span className="text-label-sm" style={{ color: 'var(--color-on-surface)', fontWeight: 700 }}>
-                    AI ACTIVE
-                  </span>
-                </div>
-              </div>
-
-              {/* Knee angle metric */}
-              <div className="hero-overlay-metric">
-                <div
-                  className="glass-card"
-                  style={{ padding: '8px 12px', borderRadius: 'var(--radius-md)' }}
-                  aria-label="Knee angle measurement: 92 degrees"
-                >
-                  <div
-                    className="text-label-sm"
-                    style={{ color: 'var(--color-secondary)', fontWeight: 700 }}
-                  >
-                    Knee Angle: 92°
-                  </div>
-                  <div className="metric-bar" role="progressbar" aria-valuenow={75} aria-valuemin={0} aria-valuemax={100}>
-                    <div className="metric-bar-fill" />
-                  </div>
-                </div>
+          <h1 className="font-display-lg text-display-lg md:text-[56px] leading-tight text-on-surface">
+            Recover Smarter with <span className="text-primary">AI Physiotherapy</span> Guidance
+          </h1>
+          <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto md:mx-0">
+            Professional rehabilitation from the comfort of home. Our AI monitors your form in real-time using computer vision to ensure every rep counts.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-md pt-md justify-center md:justify-start">
+            <button className="w-full sm:w-auto bg-primary text-on-primary px-xl py-md rounded-xl font-label-md shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-95">
+              Start Recovery
+            </button>
+            <button className="w-full sm:w-auto border-2 border-secondary text-secondary px-xl py-md rounded-xl font-label-md hover:bg-secondary-container/10 transition-all flex items-center justify-center gap-xs">
+              <span className="material-symbols-outlined">play_circle</span>
+              Watch Demo
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 w-full max-w-2xl relative scroll-reveal">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+            <img alt="Physiotherapy session with AI overlay" className="w-full h-auto object-cover aspect-video" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAduGkzaiET5TGJxDJGaMhO2CujxyHyalhPs9cYTMvwtqqqUBT4CS8YeWoLKtupiMK_RhtiK3_QQ-S7U6zMqQn7zWkeyAXzn5ykJp7YewvxU5byiEaSyVuqze5U8PbhuK0fX5VDI1rKpsa5vjqnCzJEewu5xyI9x_5SS7DuCLCvO5Rqh1HibgHtYyOu1hPXWAdtg4z3E2zIHMRsnHOOp89TcY2TeSWCz-sxftH4JLGBSQAavGCvwThm3tp76F-2lUud5xZSawlx2PB0"/>
+            {/* AI UI Overlay elements */}
+            <div className="absolute top-4 right-4 glass-card p-sm rounded-lg flex items-center gap-xs animate-pulse">
+              <div className="w-3 h-3 bg-secondary rounded-full"></div>
+              <span className="text-label-sm font-bold text-on-surface">AI ACTIVE</span>
+            </div>
+            <div className="absolute bottom-4 left-4 glass-card p-sm rounded-lg">
+              <div className="text-label-sm text-secondary font-bold">Knee Angle: 92&deg;</div>
+              <div className="w-32 h-1 bg-outline-variant rounded-full mt-1">
+                <div className="w-3/4 h-full bg-secondary rounded-full"></div>
               </div>
             </div>
           </div>

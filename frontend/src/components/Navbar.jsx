@@ -59,117 +59,95 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className={`pg-navbar fixed-top d-flex align-items-center${scrolled ? ' scrolled' : ''}`}
+      className={`fixed top-0 w-full z-50 transition-colors duration-300 ${scrolled ? 'bg-surface/95 dark:bg-surface-dim/95 backdrop-blur-md shadow-sm border-b border-outline-variant' : 'bg-transparent'}`}
       role="banner"
     >
-      <div className="pg-container w-100">
-        <nav
-          className="d-flex align-items-center justify-content-between"
-          aria-label="Main navigation"
+      <div className="flex justify-between items-center px-margin-mobile md:px-xl h-20 max-w-container-max mx-auto">
+        <Link
+          to={ROUTES.HOME}
+          className="text-headline-md font-headline-md font-bold text-primary no-underline"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="PhysioGuide AI — Go to top"
         >
-          {/* Brand */}
-          <Link
-            to={ROUTES.HOME}
-            className="navbar-brand text-decoration-none"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="PhysioGuide AI — Go to top"
-          >
-            PhysioGuide AI
-          </Link>
+          PhysioGuide AI
+        </Link>
 
-          {/* Desktop nav */}
-          <div className="d-none d-md-flex align-items-center gap-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="nav-link text-label-md"
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-              >
-                {link.label}
-              </a>
-            ))}
-            
-            {isAuthenticated ? (
-              <Link to={ROUTES.DASHBOARD} className="btn-pg-primary btn-pg-primary-pill text-label-md ms-2 text-decoration-none">
-                Dashboard
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-lg">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md"
+              onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
+            >
+              {link.label}
+            </a>
+          ))}
+          
+          {isAuthenticated ? (
+            <Link to={ROUTES.DASHBOARD} className="bg-primary text-on-primary px-lg py-xs rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all no-underline">
+              Dashboard
+            </Link>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link to={ROUTES.LOGIN} className="text-primary hover:text-primary-fixed-variant transition-colors text-label-md font-bold no-underline">
+                Log in
               </Link>
-            ) : (
-              <>
-                <Link to={ROUTES.LOGIN} className="nav-link text-label-md font-bold">
-                  Log in
-                </Link>
-                <Link to={ROUTES.REGISTER} className="btn-pg-primary btn-pg-primary-pill text-label-md ms-2 text-decoration-none">
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile hamburger */}
-          <button
-            className="pg-navbar-toggler d-flex d-md-none align-items-center justify-content-center"
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--color-primary)',
-              padding: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 28 }}>
-              {menuOpen ? 'close' : 'menu'}
-            </span>
-          </button>
+              <Link to={ROUTES.REGISTER} className="bg-primary text-on-primary px-lg py-xs rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all no-underline">
+                Sign Up
+              </Link>
+            </div>
+          )}
         </nav>
 
-        {/* Mobile nav drawer */}
-        {menuOpen && (
-          <div
-            id="mobile-nav"
-            className="d-md-none"
-            style={{
-              background: 'rgba(248,249,255,0.98)',
-              backdropFilter: 'blur(12px)',
-              borderTop: '1px solid var(--color-outline-variant)',
-              padding: 'var(--space-md)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--space-sm)',
-            }}
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="nav-link text-label-md"
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-              >
-                {link.label}
-              </a>
-            ))}
-            
-            {isAuthenticated ? (
-              <Link to={ROUTES.DASHBOARD} className="btn-pg-primary text-label-md mt-2 text-center text-decoration-none" onClick={() => setMenuOpen(false)}>
-                Go to Dashboard
-              </Link>
-            ) : (
-              <div className="d-flex flex-column gap-2 mt-2">
-                <Link to={ROUTES.LOGIN} className="btn-pg-secondary text-label-md text-center text-decoration-none" onClick={() => setMenuOpen(false)}>
-                  Log in
-                </Link>
-                <Link to={ROUTES.REGISTER} className="btn-pg-primary text-label-md text-center text-decoration-none" onClick={() => setMenuOpen(false)}>
-                  Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden text-primary"
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        >
+          <span className="material-symbols-outlined text-[28px]">
+            {menuOpen ? 'close' : 'menu'}
+          </span>
+        </button>
       </div>
+
+      {/* Mobile nav drawer */}
+      {menuOpen && (
+        <div
+          id="mobile-nav"
+          className="md:hidden absolute top-20 left-0 w-full bg-surface/98 backdrop-blur-md border-b border-outline-variant p-md flex flex-col gap-sm shadow-md"
+        >
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-on-surface-variant text-label-md py-2 border-b border-outline-variant/30"
+              onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
+            >
+              {link.label}
+            </a>
+          ))}
+          
+          {isAuthenticated ? (
+            <Link to={ROUTES.DASHBOARD} className="bg-primary text-on-primary text-center px-lg py-sm rounded-xl font-label-md mt-4" onClick={() => setMenuOpen(false)}>
+              Go to Dashboard
+            </Link>
+          ) : (
+            <div className="flex flex-col gap-3 mt-4">
+              <Link to={ROUTES.LOGIN} className="border-2 border-primary text-primary text-center px-lg py-sm rounded-xl font-label-md" onClick={() => setMenuOpen(false)}>
+                Log in
+              </Link>
+              <Link to={ROUTES.REGISTER} className="bg-primary text-on-primary text-center px-lg py-sm rounded-xl font-label-md" onClick={() => setMenuOpen(false)}>
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
     </header>
   );
 }

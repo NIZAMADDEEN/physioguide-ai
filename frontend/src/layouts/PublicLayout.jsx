@@ -21,9 +21,9 @@ export default function PublicLayout() {
   const hideFooter = location.pathname === ROUTES.LOGIN || location.pathname === ROUTES.REGISTER;
 
   return (
-    <div className="d-flex flex-column min-vh-100 bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Navbar />
-      <main className="flex-grow-1 d-flex flex-column" style={{ marginTop: '80px' }}>
+      <main className="flex-grow flex flex-col pt-20">
         <Outlet />
       </main>
       {!hideFooter && <Footer />}

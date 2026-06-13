@@ -1,62 +1,16 @@
-import { useRef } from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
-
-/**
- * CtaSection
- * Full-width primary blue banner with headline, subtitle, and two CTAs.
- */
 export default function CtaSection() {
-  const sectionRef = useRef(null);
-  useScrollReveal(sectionRef);
-
   return (
-    <section
-      ref={sectionRef}
-      className="cta-section"
-      aria-labelledby="cta-heading"
-    >
-      <div className="pg-container">
-        <div className="cta-card scroll-reveal">
-          <h2
-            id="cta-heading"
-            className="text-display-lg mb-3"
-            style={{ color: 'var(--color-on-primary)' }}
-          >
-            Ready to start your recovery?
-          </h2>
-
-          <p
-            className="text-body-lg mb-4 mx-auto"
-            style={{
-              color: 'var(--color-on-primary)',
-              opacity: 0.9,
-              maxWidth: '560px',
-            }}
-          >
-            Join thousands of patients using AI to heal faster and smarter.
-            No commitment required.
-          </p>
-
-          <div
-            className="d-flex flex-column flex-sm-row gap-3 justify-content-center"
-            style={{ paddingTop: 'var(--space-sm)' }}
-          >
-            <button
-              className="btn-pg-white"
-              id="cta-get-started"
-              aria-label="Get started for free"
-              style={{ justifyContent: 'center' }}
-            >
-              Get Started Free
-            </button>
-            <button
-              className="btn-pg-outline-white"
-              id="cta-contact-sales"
-              aria-label="Contact our sales team"
-              style={{ justifyContent: 'center' }}
-            >
-              Contact Sales
-            </button>
+    <section className="py-xl scroll-reveal">
+      <div className="max-w-container-max mx-auto px-margin-mobile md:px-xl">
+        <div className="bg-primary rounded-3xl p-xl text-center text-on-primary relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+          <div className="relative z-10 space-y-md">
+            <h2 className="text-display-lg font-display-lg">Ready to start your recovery?</h2>
+            <p className="text-body-lg opacity-90 max-w-2xl mx-auto">Join thousands of patients using AI to heal faster and smarter. No commitment required.</p>
+            <div className="flex flex-col sm:flex-row gap-md justify-center pt-md">
+              <button className="bg-white text-primary px-xl py-md rounded-xl font-bold hover:bg-surface-container-low transition-all">Get Started Free</button>
+              <button className="bg-transparent border-2 border-on-primary text-on-primary px-xl py-md rounded-xl font-bold hover:bg-white/10 transition-all">Contact Sales</button>
+            </div>
           </div>
         </div>
       </div>
