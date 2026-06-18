@@ -1,16 +1,46 @@
-# React + Vite
+# PhysioGuide AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PhysioGuide AI is a computer vision-powered physical therapy application that provides real-time posture tracking, exercise feedback, and clinical reporting using Google MediaPipe and React.
 
-Currently, two official plugins are available:
+## System Architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application is split into two independent services:
 
-## React Compiler
+### 1. Frontend (`/physioguide-ai/frontend`)
+- **Framework:** React 19 + Vite
+- **Styling:** Tailwind CSS + Vanilla CSS + Bootstrap 5
+- **Features:** Webcam rendering, dashboard charts, real-time feedback UI.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Backend (`/physioguide-ai/backend`)
+- **Framework:** Flask + SQLAlchemy
+- **Database:** SQLite
+- **Computer Vision:** MediaPipe (Pose Detection), OpenCV, NumPy
+- **Authentication:** JWT (JSON Web Tokens)
+- **Features:** Posture angle calculation, rep tracking logic, PDF report generation.
 
-## Expanding the ESLint configuration
+## Local Development Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend Setup
+1. Navigate to the backend directory: `cd physioguide-ai/backend`
+2. Create a virtual environment: `python -m venv .venv`
+3. Activate the environment:
+   - Windows: `.venv\Scripts\activate`
+   - Mac/Linux: `source .venv/bin/activate`
+4. Install dependencies: `pip install -r requirements.txt`
+5. Copy `.env.example` to `.env`
+6. Run the server: `python app.py` (Runs on `http://localhost:5000`)
+
+### Frontend Setup
+1. Navigate to the frontend directory: `cd physioguide-ai/frontend`
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env.local`
+4. Start the Vite dev server: `npm run dev` (Runs on `http://localhost:5173`)
+
+## Features
+- **Real-time Pose Tracking:** Uses MediaPipe to track 33 body landmarks.
+- **Form Correction:** Provides instant feedback on joint angles (e.g., knee flexion, shoulder abduction).
+- **Rep Tracking & Analytics:** Automatically counts reps and tracks session duration.
+- **Clinical Reports:** Generates exportable PDF reports for physical therapists.
+
+## License
+Group Members
