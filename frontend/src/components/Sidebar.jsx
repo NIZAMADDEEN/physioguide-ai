@@ -1,6 +1,6 @@
-import { NavLink, Link } from 'react-router-dom';
-import { SIDEBAR_NAV, ROUTES } from '../utils/constants';
-import { useAuth } from '../hooks/useAuth';
+import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { ROUTES, SIDEBAR_NAV } from "../utils/constants";
 
 /**
  * Sidebar navigation component for authenticated AppLayout.
@@ -13,7 +13,9 @@ export default function Sidebar() {
       {/* Brand */}
       <div className="p-4 border-bottom border-outline-variant">
         <Link to={ROUTES.DASHBOARD} className="text-decoration-none">
-          <span className="text-headline-md font-bold text-primary">PhysioGuide AI</span>
+          <span className="text-headline-md font-bold text-primary">
+            PhysioGuide AI
+          </span>
         </Link>
       </div>
 
@@ -27,8 +29,8 @@ export default function Sidebar() {
                 className={({ isActive }) =>
                   `d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none transition-all ${
                     isActive
-                      ? 'bg-primary-color bg-opacity-10 text-primary font-bold'
-                      : 'text-on-surface-variant hover-bg-surface'
+                      ? "bg-primary-color bg-opacity-10 text-white font-bold"
+                      : "text-on-surface-variant hover-bg-surface"
                   }`
                 }
               >
