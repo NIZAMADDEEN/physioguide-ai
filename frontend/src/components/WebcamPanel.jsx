@@ -738,10 +738,7 @@ export default function WebcamPanel({
               videocam
             </span>
           </div>
-          <h3
-            className="text-white font-bold mb-2"
-            style={{ fontSize: "22px" }}
-          >
+          <h3 className="font-bold mb-2" style={{ fontSize: "22px" }}>
             Ready to Begin?
           </h3>
           <p
