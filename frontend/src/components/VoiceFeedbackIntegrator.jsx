@@ -1,18 +1,18 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { useVoiceCoachContext } from '../context/VoiceCoachContext';
-import { useSession } from '../hooks/useSession';
-import { getConfidenceLevel } from '../config/voiceCoachConfig';
+import { useEffect, useRef, useCallback } from "react";
+import { useVoiceCoachContext } from "../context/VoiceCoachContext";
+import { useSession } from "../hooks/useSession";
+import { getConfidenceLevel } from "../config/voiceCoachConfig";
 
 /**
  * Voice Feedback Integrator
  * Bridges the feedback engine with voice coaching
- * 
+ *
  * This component:
  * - Listens for posture corrections from the feedback system
  * - Tracks repetition counts and announces them
  * - Provides timed encouragement
  * - Ensures proper confidence levels before announcing
- * 
+ *
  * Should be placed in the LiveMonitoringPage or similar exercise component
  */
 export function VoiceFeedbackIntegrator() {
@@ -86,7 +86,10 @@ export function VoiceFeedbackIntegrator() {
     const checkEncouragement = () => {
       const now = Date.now();
 
-      if (now - lastEncouragementRef.current >= encouragementIntervalRef.current) {
+      if (
+        now - lastEncouragementRef.current >=
+        encouragementIntervalRef.current
+      ) {
         lastEncouragementRef.current = now;
         voiceCoach.announceEncouragement();
       }

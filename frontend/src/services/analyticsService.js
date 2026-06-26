@@ -8,4 +8,4 @@ export {
   getMobilityScores,
   getWeeklyExercises,
   getTimeline,
-} from './sessionService';
+} from "./sessionService";

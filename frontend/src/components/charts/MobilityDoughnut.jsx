@@ -1,11 +1,6 @@
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
-import { CHART_COLORS } from '../../utils/constants';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+import { CHART_COLORS } from "../../utils/constants";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,7 +26,7 @@ export default function MobilityDoughnut({ data }) {
         data: scores,
         backgroundColor: backgroundColors.slice(0, data.length),
         borderWidth: 2,
-        borderColor: '#fff',
+        borderColor: "#fff",
         hoverOffset: 4,
       },
     ],
@@ -40,21 +35,21 @@ export default function MobilityDoughnut({ data }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '70%',
+    cutout: "70%",
     plugins: {
       legend: {
-        position: 'right',
+        position: "right",
         labels: {
-          font: { family: 'Inter', size: 13 },
+          font: { family: "Inter", size: 13 },
           usePointStyle: true,
           boxWidth: 8,
           padding: 20,
         },
       },
       tooltip: {
-        backgroundColor: 'rgba(11, 28, 48, 0.9)',
-        titleFont: { family: 'Inter', size: 13 },
-        bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+        backgroundColor: "rgba(11, 28, 48, 0.9)",
+        titleFont: { family: "Inter", size: 13 },
+        bodyFont: { family: "Inter", size: 14, weight: "bold" },
         padding: 12,
         callbacks: {
           label: (context) => ` ${context.label}: ${context.raw}%`,
@@ -69,7 +64,7 @@ export default function MobilityDoughnut({ data }) {
       {/* Center Text */}
       <div
         className="position-absolute top-50 start-50 translate-middle text-center"
-        style={{ pointerEvents: 'none', marginLeft: '-50px' }} // adjust for right legend
+        style={{ pointerEvents: "none", marginLeft: "-50px" }} // adjust for right legend
       >
         <span className="d-block text-headline-md m-0">
           {Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)}%

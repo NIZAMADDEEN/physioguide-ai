@@ -1,6 +1,12 @@
-import { createContext, useState, useEffect, useMemo } from 'react';
-import { getStoredUser, setStoredUser, removeStoredUser, setToken, removeToken } from '../utils/helpers';
-import * as authService from '../services/authService';
+import { createContext, useState, useEffect, useMemo } from "react";
+import {
+  getStoredUser,
+  setStoredUser,
+  removeStoredUser,
+  setToken,
+  removeToken,
+} from "../utils/helpers";
+import * as authService from "../services/authService";
 
 export const AuthContext = createContext(null);
 
@@ -60,7 +66,7 @@ export function AuthProvider({ children }) {
       logout,
       updateProfile,
     }),
-    [user, loading]
+    [user, loading],
   );
 
   if (loading) {

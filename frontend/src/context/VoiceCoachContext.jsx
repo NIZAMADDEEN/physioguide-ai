@@ -1,5 +1,11 @@
-import { createContext, useContext, useCallback, useRef, useEffect } from 'react';
-import { useVoiceCoach } from '../hooks/useVoiceCoach';
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
+import { useVoiceCoach } from "../hooks/useVoiceCoach";
 
 export const VoiceCoachContext = createContext(null);
 
@@ -18,11 +24,7 @@ export function VoiceCoachProvider({ children }) {
    */
   const queueFeedback = useCallback(
     (feedback, confidence) => {
-      if (
-        !feedback ||
-        confidence < 0.85 ||
-        !voiceCoach.isEnabled
-      ) {
+      if (!feedback || confidence < 0.85 || !voiceCoach.isEnabled) {
         return;
       }
 
@@ -45,7 +47,7 @@ export function VoiceCoachProvider({ children }) {
         });
       }
     },
-    [voiceCoach]
+    [voiceCoach],
   );
 
   /**
@@ -66,7 +68,7 @@ export function VoiceCoachProvider({ children }) {
         queueFeedback(sorted[0], confidence);
       }
     },
-    [queueFeedback]
+    [queueFeedback],
   );
 
   const value = {
@@ -90,7 +92,7 @@ export function useVoiceCoachContext() {
   const context = useContext(VoiceCoachContext);
   if (!context) {
     throw new Error(
-      'useVoiceCoachContext must be used within VoiceCoachProvider'
+      "useVoiceCoachContext must be used within VoiceCoachProvider",
     );
   }
   return context;

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 /**
  * useScrollReveal
@@ -9,7 +9,12 @@ import { useEffect } from 'react';
  * @param {string} selector - CSS selector for children to animate (default: '.scroll-reveal')
  * @param {number} threshold - visibility threshold 0–1 (default: 0.1)
  */
-export function useScrollReveal(containerRef, selector = '.scroll-reveal', threshold = 0.1, dependencies = []) {
+export function useScrollReveal(
+  containerRef,
+  selector = ".scroll-reveal",
+  threshold = 0.1,
+  dependencies = [],
+) {
   useEffect(() => {
     const container = containerRef?.current;
     if (!container) return;
@@ -21,12 +26,12 @@ export function useScrollReveal(containerRef, selector = '.scroll-reveal', thres
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
+            entry.target.classList.add("revealed");
             observer.unobserve(entry.target); // fire once
           }
         });
       },
-      { threshold }
+      { threshold },
     );
 
     elements.forEach((el) => observer.observe(el));

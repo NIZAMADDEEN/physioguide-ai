@@ -1,4 +1,4 @@
-import api from './api';
+import api from "./api";
 
 /**
  * Authentication service — Flask API implementation.
@@ -6,15 +6,15 @@ import api from './api';
 
 /**
  * Logs in a user by verifying credentials against the Flask backend.
- * @param {string} email 
- * @param {string} password 
+ * @param {string} email
+ * @param {string} password
  * @returns {Promise<Object>} { user, token }
  */
 export async function login(email, password) {
   if (!email || !password) {
-    throw new Error('Email and password are required');
+    throw new Error("Email and password are required");
   }
-  const response = await api.post('/auth/login', { email, password });
+  const response = await api.post("/auth/login", { email, password });
   return response.data; // Expects { user, token }
 }
 
@@ -26,9 +26,9 @@ export async function login(email, password) {
 export async function register(registerData) {
   const { name, email, password } = registerData;
   if (!name || !email || !password) {
-    throw new Error('All fields are required');
+    throw new Error("All fields are required");
   }
-  const response = await api.post('/auth/register', registerData);
+  const response = await api.post("/auth/register", registerData);
   return response.data; // Expects { user, token }
 }
 
@@ -38,9 +38,9 @@ export async function register(registerData) {
  */
 export async function logout() {
   try {
-    await api.post('/auth/logout');
+    await api.post("/auth/logout");
   } catch (err) {
-    console.error('Logout request failed', err);
+    console.error("Logout request failed", err);
   }
   return true;
 }
@@ -50,7 +50,7 @@ export async function logout() {
  * @returns {Promise<Object>} The user profile object
  */
 export async function getCurrentUser() {
-  const response = await api.get('/auth/me');
+  const response = await api.get("/auth/me");
   return response.data; // Expects user object
 }
 
@@ -60,6 +60,6 @@ export async function getCurrentUser() {
  * @returns {Promise<Object>} The updated user profile object
  */
 export async function updateProfile(data) {
-  const response = await api.put('/auth/profile', data);
+  const response = await api.put("/auth/profile", data);
   return response.data; // Expects updated user object
 }

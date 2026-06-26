@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 /**
  * Hook for performing GET/Query operations.
@@ -20,7 +20,7 @@ export function useQuery(apiFunc, args = [], dependencies = []) {
       const result = await apiFunc(...args);
       setData(result);
     } catch (err) {
-      setError(err.message || 'An error occurred');
+      setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -58,15 +58,14 @@ export function useMutation(apiFunc) {
         setData(result);
         return result;
       } catch (err) {
-        setError(err.message || 'Mutation failed');
+        setError(err.message || "Mutation failed");
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [apiFunc]
+    [apiFunc],
   );
 
   return [mutate, { data, loading, error }];
 }
-

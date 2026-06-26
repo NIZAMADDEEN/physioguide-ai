@@ -1,23 +1,23 @@
 /**
  * LiveMonitoringPage - Example Integration with Voice Coaching
- * 
+ *
  * This example shows how to fully integrate the voice coaching system
  * with the existing live monitoring functionality.
- * 
+ *
  * To use this:
  * 1. Replace or update your existing LiveMonitoringPage with this code
  * 2. Adjust imports to match your actual component structure
  * 3. Customize voice modes and feedback as needed
  */
 
-import { useState, useEffect, useRef } from 'react';
-import { useSession } from '../hooks/useSession';
-import { useAdvancedVoiceCoach } from '../hooks/useAdvancedVoiceCoach';
-import WebcamPanel from '../components/WebcamPanel';
-import FeedbackPanel from '../components/FeedbackPanel';
-import VoiceCoachPanel from '../components/VoiceCoachPanel';
-import { VoiceFeedbackIntegrator } from '../components/VoiceFeedbackIntegrator';
-import '../styles/liveMonitoring.css';
+import { useState, useEffect, useRef } from "react";
+import { useSession } from "../hooks/useSession";
+import { useAdvancedVoiceCoach } from "../hooks/useAdvancedVoiceCoach";
+import WebcamPanel from "../components/WebcamPanel";
+import FeedbackPanel from "../components/FeedbackPanel";
+import VoiceCoachPanel from "../components/VoiceCoachPanel";
+import { VoiceFeedbackIntegrator } from "../components/VoiceFeedbackIntegrator";
+import "../styles/liveMonitoring.css";
 
 export default function LiveMonitoringPage() {
   const { cameraActive, reps, accuracy, corrections, statusMsg, isPaused } =
@@ -29,8 +29,8 @@ export default function LiveMonitoringPage() {
   // Local state
   const [sessionActive, setSessionActive] = useState(false);
   const [targetReps, setTargetReps] = useState(15);
-  const [exerciseName, setExerciseName] = useState('Squats');
-  const [voiceMode, setVoiceMode] = useState('coach');
+  const [exerciseName, setExerciseName] = useState("Squats");
+  const [voiceMode, setVoiceMode] = useState("coach");
   const [sessionStats, setSessionStats] = useState(null);
 
   const sessionStartedRef = useRef(false);
@@ -261,7 +261,9 @@ export default function LiveMonitoringPage() {
               </div>
               <div className="stat-row">
                 <span>Avg Confidence:</span>
-                <strong>{(sessionStats.averageConfidence * 100).toFixed(0)}%</strong>
+                <strong>
+                  {(sessionStats.averageConfidence * 100).toFixed(0)}%
+                </strong>
               </div>
             </div>
           )}

@@ -1,4 +1,4 @@
-import api from './api';
+import api from "./api";
 
 /**
  * Report service — Flask API implementation.
@@ -9,7 +9,7 @@ import api from './api';
  * @returns {Promise<Array>} List of report objects
  */
 export async function getReports() {
-  const response = await api.get('/reports');
+  const response = await api.get("/reports");
   return response.data; // Expects array of reports
 }
 
@@ -27,12 +27,12 @@ export async function getReportById(id) {
 /**
  * Requests a PDF export for the given report.
  * Returns a blob URL suitable for triggering a browser download.
- * @param {string} id 
+ * @param {string} id
  * @returns {Promise<string>} Blob URL
  */
 export async function exportPdf(id) {
   const response = await api.get(`/reports/${id}/export`, {
-    responseType: 'blob',
+    responseType: "blob",
   });
   return URL.createObjectURL(response.data);
 }

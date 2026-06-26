@@ -1,6 +1,6 @@
-import React from 'react';
-import Card from './common/Card';
-import Button from './common/Button';
+import React from "react";
+import Card from "./common/Card";
+import Button from "./common/Button";
 
 /**
  * Error boundary component to catch React rendering errors.
@@ -16,7 +16,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
   }
 
   handleReset = () => {
@@ -29,7 +29,10 @@ export default class ErrorBoundary extends React.Component {
       return (
         <div className="d-flex align-items-center justify-content-center min-vh-100 bg-background p-4">
           <Card elevation={2} className="max-w-md text-center">
-            <span className="material-symbols-outlined text-error mb-3" style={{ fontSize: 48 }}>
+            <span
+              className="material-symbols-outlined text-error mb-3"
+              style={{ fontSize: 48 }}
+            >
               error
             </span>
             <h2 className="text-headline-md mb-2">Something went wrong</h2>

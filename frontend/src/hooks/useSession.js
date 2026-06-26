@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { SessionContext } from '../context/SessionContext';
+import { useContext } from "react";
+import { SessionContext } from "../context/SessionContext";
 
 /**
  * Custom hook to consume SessionContext.
@@ -8,7 +8,7 @@ import { SessionContext } from '../context/SessionContext';
 export function useSession() {
   const context = useContext(SessionContext);
   if (!context) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error("useSession must be used within a SessionProvider");
   }
   return context;
 }

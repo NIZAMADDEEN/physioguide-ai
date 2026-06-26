@@ -6,9 +6,9 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { CHART_COLORS } from '../../utils/constants';
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { CHART_COLORS } from "../../utils/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -16,7 +16,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export default function ExerciseBarChart({ data }) {
@@ -30,7 +30,7 @@ export default function ExerciseBarChart({ data }) {
     labels,
     datasets: [
       {
-        label: 'Completed',
+        label: "Completed",
         data: completed,
         backgroundColor: CHART_COLORS.primary,
         borderRadius: 4,
@@ -38,7 +38,7 @@ export default function ExerciseBarChart({ data }) {
         categoryPercentage: 0.8,
       },
       {
-        label: 'Target',
+        label: "Target",
         data: targets,
         backgroundColor: CHART_COLORS.outline,
         borderRadius: 4,
@@ -51,27 +51,37 @@ export default function ExerciseBarChart({ data }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    indexAxis: 'y', // Horizontal bar chart
+    indexAxis: "y", // Horizontal bar chart
     plugins: {
       legend: {
-        position: 'top',
-        labels: { font: { family: 'Inter', size: 13 }, usePointStyle: true, boxWidth: 8 },
+        position: "top",
+        labels: {
+          font: { family: "Inter", size: 13 },
+          usePointStyle: true,
+          boxWidth: 8,
+        },
       },
       tooltip: {
-        backgroundColor: 'rgba(11, 28, 48, 0.9)',
-        titleFont: { family: 'Inter', size: 13 },
-        bodyFont: { family: 'Inter', size: 14 },
+        backgroundColor: "rgba(11, 28, 48, 0.9)",
+        titleFont: { family: "Inter", size: 13 },
+        bodyFont: { family: "Inter", size: 14 },
         padding: 12,
       },
     },
     scales: {
       x: {
-        grid: { color: 'rgba(193, 198, 213, 0.3)', drawBorder: false },
-        ticks: { font: { family: 'Inter', size: 12 }, color: CHART_COLORS.textDim },
+        grid: { color: "rgba(193, 198, 213, 0.3)", drawBorder: false },
+        ticks: {
+          font: { family: "Inter", size: 12 },
+          color: CHART_COLORS.textDim,
+        },
       },
       y: {
         grid: { display: false },
-        ticks: { font: { family: 'Inter', size: 13 }, color: CHART_COLORS.text },
+        ticks: {
+          font: { family: "Inter", size: 13 },
+          color: CHART_COLORS.text,
+        },
       },
     },
   };

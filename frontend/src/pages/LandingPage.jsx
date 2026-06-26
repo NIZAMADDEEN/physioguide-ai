@@ -1,24 +1,27 @@
-import { useEffect } from 'react';
-import HeroSection from '../components/HeroSection';
-import FeaturesSection from '../components/FeaturesSection';
-import HowItWorksSection from '../components/HowItWorksSection';
-import TestimonialsSection from '../components/TestimonialsSection';
-import CtaSection from '../components/CtaSection';
+import { useEffect } from "react";
+import HeroSection from "../components/HeroSection";
+import FeaturesSection from "../components/FeaturesSection";
+import HowItWorksSection from "../components/HowItWorksSection";
+import TestimonialsSection from "../components/TestimonialsSection";
+import CtaSection from "../components/CtaSection";
 
 /**
  * Landing Page combining public sections.
  */
 export default function LandingPage() {
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-        }
-      });
-    }, { threshold: 0.1 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
 
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
+    document.querySelectorAll(".scroll-reveal").forEach((el) => {
       observer.observe(el);
     });
 

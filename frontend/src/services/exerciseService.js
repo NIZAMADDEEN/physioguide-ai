@@ -1,4 +1,4 @@
-import api from './api';
+import api from "./api";
 
 /**
  * Exercise service — Flask API implementation.
@@ -11,20 +11,20 @@ import api from './api';
  */
 export async function getExercises(filters = {}) {
   const params = {};
-  if (filters.category && filters.category !== 'All') {
+  if (filters.category && filters.category !== "All") {
     params.category = filters.category;
   }
   if (filters.search) {
     params.search = filters.search;
   }
 
-  const response = await api.get('/exercises', { params });
+  const response = await api.get("/exercises", { params });
   return response.data; // Expects array of exercises
 }
 
 /**
  * Fetches details for a specific exercise by ID.
- * @param {string} id 
+ * @param {string} id
  * @returns {Promise<Object|null>} The exercise object
  */
 export async function getExerciseById(id) {

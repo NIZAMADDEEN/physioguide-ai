@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useVoiceCoachContext } from '../context/VoiceCoachContext';
+import { useState, useEffect } from "react";
+import { useVoiceCoachContext } from "../context/VoiceCoachContext";
 import {
   getAvailableVoiceModes,
   getConfidenceLevel,
-} from '../config/voiceCoachConfig';
-import Card from './common/Card';
-import Button from './common/Button';
-import '../styles/voiceCoach.css';
+} from "../config/voiceCoachConfig";
+import Card from "./common/Card";
+import Button from "./common/Button";
+import "../styles/voiceCoach.css";
 
 /**
  * Voice Coach Control Panel
@@ -19,7 +19,7 @@ import '../styles/voiceCoach.css';
 export default function VoiceCoachPanel() {
   const voiceCoach = useVoiceCoachContext();
   const [availableModes, setAvailableModes] = useState([]);
-  const [testMessage, setTestMessage] = useState('');
+  const [testMessage, setTestMessage] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function VoiceCoachPanel() {
           onClick={() => setShowAdvanced(!showAdvanced)}
           aria-label="Toggle advanced settings"
         >
-          {showAdvanced ? '−' : '+'}
+          {showAdvanced ? "−" : "+"}
         </button>
       </div>
 
@@ -64,14 +64,18 @@ export default function VoiceCoachPanel() {
       <div className="voice-status">
         <div className="status-item">
           <span className="status-label">Status:</span>
-          <span className={`status-value ${voiceCoach.isEnabled ? 'enabled' : 'disabled'}`}>
-            {voiceCoach.isEnabled ? 'Enabled' : 'Disabled'}
+          <span
+            className={`status-value ${voiceCoach.isEnabled ? "enabled" : "disabled"}`}
+          >
+            {voiceCoach.isEnabled ? "Enabled" : "Disabled"}
           </span>
         </div>
         <div className="status-item">
           <span className="status-label">Speaking:</span>
-          <span className={`status-value ${voiceCoach.isSpeaking ? 'active' : ''}`}>
-            {voiceCoach.isSpeaking ? '🔊 Speaking...' : '🔇 Silent'}
+          <span
+            className={`status-value ${voiceCoach.isSpeaking ? "active" : ""}`}
+          >
+            {voiceCoach.isSpeaking ? "🔊 Speaking..." : "🔇 Silent"}
           </span>
         </div>
       </div>
@@ -80,10 +84,10 @@ export default function VoiceCoachPanel() {
       <div className="voice-control-button">
         <Button
           onClick={handleToggleVoice}
-          variant={voiceCoach.isEnabled ? 'primary' : 'secondary'}
+          variant={voiceCoach.isEnabled ? "primary" : "secondary"}
           className="full-width"
         >
-          {voiceCoach.isEnabled ? '🔇 Disable Voice' : '🔊 Enable Voice'}
+          {voiceCoach.isEnabled ? "🔇 Disable Voice" : "🔊 Enable Voice"}
         </Button>
       </div>
 

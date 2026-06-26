@@ -1,5 +1,5 @@
-import { useCallback, useRef, useEffect, useState } from 'react';
-import { voiceModes, confidenceThreshold } from '../config/voiceCoachConfig';
+import { useCallback, useRef, useEffect, useState } from "react";
+import { voiceModes, confidenceThreshold } from "../config/voiceCoachConfig";
 
 /**
  * Custom hook for managing real-time voice coaching using Web Speech Synthesis API.
@@ -12,7 +12,7 @@ import { voiceModes, confidenceThreshold } from '../config/voiceCoachConfig';
  */
 export function useVoiceCoach() {
   const synthesisRef = useRef(null);
-  const [voiceMode, setVoiceMode] = useState('coach');
+  const [voiceMode, setVoiceMode] = useState("coach");
   const [isEnabled, setIsEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [supportedVoices, setSupportedVoices] = useState([]);
@@ -39,10 +39,10 @@ export function useVoiceCoach() {
     if (synth.getVoices().length > 0) {
       loadVoices();
     }
-    synth.addEventListener('voiceschanged', loadVoices);
+    synth.addEventListener("voiceschanged", loadVoices);
 
     return () => {
-      synth.removeEventListener('voiceschanged', loadVoices);
+      synth.removeEventListener("voiceschanged", loadVoices);
     };
   }, []);
 
@@ -58,14 +58,14 @@ export function useVoiceCoach() {
       const match = supportedVoices.find(
         (voice) =>
           voice.name.toLowerCase().includes(pref.name.toLowerCase()) &&
-          voice.lang.startsWith(pref.lang)
+          voice.lang.startsWith(pref.lang),
       );
       if (match) return match;
     }
 
     // Fallback to first voice matching language
     const langFallback = supportedVoices.find((voice) =>
-      voice.lang.startsWith('en')
+      voice.lang.startsWith("en"),
     );
     return langFallback || supportedVoices[0];
   }, [voiceMode, supportedVoices]);
@@ -81,7 +81,7 @@ export function useVoiceCoach() {
       const voice = selectVoice();
 
       if (!voice) {
-        console.warn('[useVoiceCoach] No suitable voice found');
+        console.warn("[useVoiceCoach] No suitable voice found");
         return;
       }
 
@@ -106,13 +106,13 @@ export function useVoiceCoach() {
       };
 
       utterance.onerror = (event) => {
-        console.error('[useVoiceCoach] Speech synthesis error:', event.error);
+        console.error("[useVoiceCoach] Speech synthesis error:", event.error);
         setIsSpeaking(false);
       };
 
       synth.speak(utterance);
     },
-    [isEnabled, voiceMode, selectVoice]
+    [isEnabled, voiceMode, selectVoice],
   );
 
   /**
@@ -143,7 +143,7 @@ export function useVoiceCoach() {
       const announcement = currentMode.formatCorrection(feedback.message);
       speak(announcement, { rate: 0.95, pitch: 1.0 });
     },
-    [voiceMode, speak]
+    [voiceMode, speak],
   );
 
   /**
@@ -161,12 +161,12 @@ export function useVoiceCoach() {
       let announcement = currentMode.formatRepetition(currentReps);
 
       if (targetReps && currentReps === targetReps) {
-        announcement += '. Excellent work, set complete!';
+        announcement += ". Excellent work, set complete!";
       }
 
       speak(announcement, { rate: 1.0, pitch: 1.1 });
     },
-    [voiceMode, speak]
+    [voiceMode, speak],
   );
 
   /**
@@ -193,7 +193,7 @@ export function useVoiceCoach() {
 
       speak(randomEncouragement, { rate: 1.05, pitch: 1.2 });
     },
-    [voiceMode, speak]
+    [voiceMode, speak],
   );
 
   /**
@@ -225,7 +225,7 @@ export function useVoiceCoach() {
       speak(message, { rate: 0.9, pitch: 0.95 });
       announcedFeedbackRef.current.clear();
     },
-    [voiceMode, speak]
+    [voiceMode, speak],
   );
 
   /**

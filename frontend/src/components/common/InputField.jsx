@@ -1,12 +1,12 @@
-import { useId } from 'react';
-import { classNames } from '../../utils/helpers';
+import { useId } from "react";
+import { classNames } from "../../utils/helpers";
 
 /**
  * Reusable InputField component matching DESIGN.md
  */
 export default function InputField({
   label,
-  type = 'text',
+  type = "text",
   error,
   icon,
   className,
@@ -17,9 +17,12 @@ export default function InputField({
   const id = customId || generatedId;
 
   return (
-    <div className={classNames('mb-3', className)}>
+    <div className={classNames("mb-3", className)}>
       {label && (
-        <label htmlFor={id} className="form-label text-label-sm mb-1 text-on-surface">
+        <label
+          htmlFor={id}
+          className="form-label text-label-sm mb-1 text-on-surface"
+        >
           {label} {props.required && <span className="text-error">*</span>}
         </label>
       )}
@@ -27,7 +30,7 @@ export default function InputField({
         {icon && (
           <span
             className="material-symbols-outlined position-absolute top-50 translate-middle-y text-outline"
-            style={{ left: '12px', fontSize: 20 }}
+            style={{ left: "12px", fontSize: 20 }}
           >
             {icon}
           </span>
@@ -36,9 +39,9 @@ export default function InputField({
           id={id}
           type={type}
           className={classNames(
-            'form-control pg-input',
-            icon ? 'ps-5' : '',
-            error ? 'is-invalid' : ''
+            "form-control pg-input",
+            icon ? "ps-5" : "",
+            error ? "is-invalid" : "",
           )}
           {...props}
         />

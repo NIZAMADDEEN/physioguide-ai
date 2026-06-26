@@ -1,12 +1,18 @@
-import { createContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { getExercises as fetchExercisesApi } from '../services/exerciseService';
+import {
+  createContext,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import { getExercises as fetchExercisesApi } from "../services/exerciseService";
 
 export const ExerciseContext = createContext(null);
 
 export function ExerciseProvider({ children }) {
   const [exercises, setExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [filters, setFilters] = useState({ category: 'All', search: '' });
+  const [filters, setFilters] = useState({ category: "All", search: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,7 +24,7 @@ export function ExerciseProvider({ children }) {
       const data = await fetchExercisesApi(filters);
       setExercises(data);
     } catch (err) {
-      setError(err.message || 'Failed to load exercises');
+      setError(err.message || "Failed to load exercises");
     } finally {
       setLoading(false);
     }
@@ -68,8 +74,12 @@ export function ExerciseProvider({ children }) {
       selectExercise,
       clearSelectedExercise,
       loadExercises,
-    ]
+    ],
   );
 
-  return <ExerciseContext.Provider value={value}>{children}</ExerciseContext.Provider>;
+  return (
+    <ExerciseContext.Provider value={value}>
+      {children}
+    </ExerciseContext.Provider>
+  );
 }

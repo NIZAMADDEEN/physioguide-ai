@@ -1,5 +1,5 @@
-import { useCallback, useRef, useEffect } from 'react';
-import { useVoiceCoachContext } from '../context/VoiceCoachContext';
+import { useCallback, useRef, useEffect } from "react";
+import { useVoiceCoachContext } from "../context/VoiceCoachContext";
 
 /**
  * Advanced Voice Coaching Hook
@@ -60,7 +60,7 @@ export function useAdvancedVoiceCoach() {
         sessionStatsRef.current.correctionsAnnounced++;
       }
     },
-    [voiceCoach]
+    [voiceCoach],
   );
 
   /**
@@ -100,7 +100,7 @@ export function useAdvancedVoiceCoach() {
         }
       }
     },
-    [voiceCoach]
+    [voiceCoach],
   );
 
   /**
@@ -115,19 +115,19 @@ export function useAdvancedVoiceCoach() {
         targetReps = 0,
         accuracy = 0,
         duration = 0,
-        exerciseName = 'exercise',
+        exerciseName = "exercise",
       } = context;
 
-      let message = '';
+      let message = "";
       const repsRemaining = targetReps - currentReps;
 
       // Customize message based on progress
       if (accuracy >= 90) {
-        message = 'Excellent form! Keep that perfect technique!';
+        message = "Excellent form! Keep that perfect technique!";
       } else if (accuracy >= 75) {
-        message = 'Nice work! Your form is improving well!';
+        message = "Nice work! Your form is improving well!";
       } else {
-        message = 'Keep focused! You are doing great!';
+        message = "Keep focused! You are doing great!";
       }
 
       // Add reps remaining info if applicable
@@ -138,7 +138,7 @@ export function useAdvancedVoiceCoach() {
       voiceCoach.speak(message);
       sessionStatsRef.current.encouragementsAnnounced++;
     },
-    [voiceCoach]
+    [voiceCoach],
   );
 
   /**
@@ -146,8 +146,11 @@ export function useAdvancedVoiceCoach() {
    */
   const startSessionWithSetup = useCallback(
     (sessionConfig = {}) => {
-      const { exerciseName = 'exercise', targetReps = null, mode = null } =
-        sessionConfig;
+      const {
+        exerciseName = "exercise",
+        targetReps = null,
+        mode = null,
+      } = sessionConfig;
 
       if (mode) {
         voiceCoach.setVoiceMode(mode);
@@ -172,7 +175,7 @@ export function useAdvancedVoiceCoach() {
 
       voiceCoach.speak(message);
     },
-    [voiceCoach]
+    [voiceCoach],
   );
 
   /**
@@ -184,7 +187,7 @@ export function useAdvancedVoiceCoach() {
       const stats = sessionStatsRef.current;
       const elapsedTime = Math.floor((Date.now() - stats.startTime) / 1000);
 
-      let summary = '';
+      let summary = "";
 
       if (reps > 0) {
         summary += `You completed ${reps} repetitions. `;
@@ -204,19 +207,19 @@ export function useAdvancedVoiceCoach() {
       // Provide motivation based on performance
       if (accuracy >= 85) {
         summary +=
-          'Excellent work! Your dedication to proper form is impressive!';
+          "Excellent work! Your dedication to proper form is impressive!";
       } else if (accuracy >= 70) {
         summary +=
-          'Great effort! Keep practicing and your form will continue improving!';
+          "Great effort! Keep practicing and your form will continue improving!";
       } else {
         summary +=
-          'Well done on completing your session! Every rep brings you closer to your goals!';
+          "Well done on completing your session! Every rep brings you closer to your goals!";
       }
 
       voiceCoach.speak(summary);
       voiceCoach.endSession(sessionData);
     },
-    [voiceCoach]
+    [voiceCoach],
   );
 
   /**
@@ -237,7 +240,7 @@ export function useAdvancedVoiceCoach() {
           ? (
               feedbackHistoryRef.current.reduce(
                 (sum, item) => sum + item.confidence,
-                0
+                0,
               ) / feedbackHistoryRef.current.length
             ).toFixed(2)
           : 0,
