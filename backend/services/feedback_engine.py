@@ -8,24 +8,33 @@ def compute_frame_accuracy(exercise_id, angles, phase):
 
     score = 100.0
 
+    # Fallback to whichever side is tracking best or available
+    knee_angle = angles.get('left_knee', angles.get('right_knee', 180))
+    elbow_angle = angles.get('left_elbow', angles.get('right_elbow', 180))
+
     if exercise_id == 'squats':
-        knee_angle = angles.get('left_knee', angles.get('right_knee', 180))
         if phase == 'down':
             # Target is ~90-100 degrees
             if knee_angle > 110:
                 score -= min(50.0, (knee_angle - 110) * 1.5)
             elif knee_angle < 70:
                 score -= min(30.0, (70 - knee_angle) * 1.5)
+
     elif exercise_id == 'shoulder-press':
-        elbow_angle = angles.get('left_elbow', angles.get('right_elbow', 180))
         if phase == 'down':
             if elbow_angle > 110:
                 score -= min(30.0, (elbow_angle - 110) * 1.5)
         elif phase == 'up':
             if elbow_angle < 140:
                 score -= min(30.0, (140 - elbow_angle) * 1.5)
-    
-    # Simple default score if not deeply evaluated
+
+    elif exercise_id == 'bicep-curls':
+        if phase == 'flexed':
+            if elbow_angle > 70:
+                score -= min(30.0, (elbow_angle - 70) * 1.5)
+        elif phase == 'extended':
+            if elbow_angle < 150:
+                score -= min(30.0, (150 - elbow_angle) * 1.5)
     return max(0.0, min(100.0, score))
 
 
@@ -105,6 +114,21 @@ def generate_feedback(exercise_id, angles, landmarks, tracker_state):
             feedback.append({
                 'type': 'info',
                 'message': 'Lower your hands closer to your shoulders.',
+                'joint': 'elbow'
+            })
+    elif exercise_id == 'bicep-curls':
+        elbow_angle = angles.get('left_elbow', angles.get('right_elbow', 180))
+
+        if phase == 'flexed' and elbow_angle > 70:
+            feedback.append({
+                'type': 'info',
+                'message': 'Curl your hands closer to your shoulders.',
+                'joint': 'elbow'
+            })
+        elif phase == 'extended' and elbow_angle < 150:
+            feedback.append({
+                'type': 'warning',
+                'message': 'Fully extend your arms before the next curl.',
                 'joint': 'elbow'
             })
 

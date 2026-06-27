@@ -42,6 +42,13 @@ EXERCISE_CONFIGS = {
         'targetSets': 3,
         'extendThreshold': 150,
         'flexThreshold': 90
+    },
+        'bicep-curls': {
+        'id': 'bicep-curls',
+        'targetReps': 10,
+        'targetSets': 3,
+        'flexThreshold': 60,    # Elbow angle at the top of the curl
+        'extendThreshold': 160  # Elbow angle when the arm is straight
     }
 }
 
@@ -90,6 +97,8 @@ class ExerciseTracker:
             self._track_leg_lift(angles)
         elif self.exercise_id == 'shoulder-press':
             self._track_shoulder_press(angles)
+        elif self.exercise_id == 'bicep-curls':
+            self._track_bicep_curls(angles)
             
         return self.get_state()
 
@@ -158,6 +167,15 @@ class ExerciseTracker:
             if self.phase == 'up':
                 self._complete_rep()
             self.phase = 'down'
+    def _track_bicep_curls(self, angles):
+        elbow_angle = angles.get('left_elbow', angles.get('right_elbow', 180))
+
+        if elbow_angle < self.config['flexThreshold']:
+            self.phase = 'flexed'
+        elif elbow_angle > self.config['extendThreshold']:
+            if self.phase == 'flexed':
+                self._complete_rep()
+            self.phase = 'extended'
 
 _ACTIVE_TRACKERS = {}
 

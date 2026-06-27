@@ -139,6 +139,20 @@ CV_EXERCISES = [
             'Keep your back straight'
         ],
     },
+    {
+        'id':          'bicep-curls',
+        'name':        'Bicep Curls',
+        'category':    'Upper Body Mobility',
+        'targetReps':  10,
+        'targetSets':  3,
+        'primaryJoint':'elbow',
+        'description': 'Stand straight with your arms at your sides. Bend at the elbows to bring your hands to your shoulders, focusing on contracting the biceps. Lower your arms slowly back to the starting position.',
+        'tips': [
+            'Keep your elbows tucked close to your sides',
+            'Avoid swinging your body for momentum',
+            'Lower your arms slowly and with control',
+        ],
+    },
 ]
 
 
@@ -258,7 +272,9 @@ def process_frame():
         logger.error('[CV process-frame] Pose detection error: %s', exc)
         return jsonify({'error': 'Pose detection failed', 'detail': str(exc)}), 500
 
+
     if not pose_result.pose_detected:
+        logger.error('Posse detection failed: %s', exc)
         return jsonify({
             'poseDetected':   False,
             'landmarks':      {},
