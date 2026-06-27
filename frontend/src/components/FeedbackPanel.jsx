@@ -226,7 +226,9 @@ export default function FeedbackPanel({
                   className="position-absolute text-headline-sm font-bold text-on-surface"
                   style={{ fontSize: "13px" }}
                 >
-                  {cameraActive ? `${accuracy}%` : "—"}
+                  {cameraActive
+                    ? `${Math.round(Math.max(0, Math.min(100, Number(accuracy) || 0)))}%`
+                    : "—"}
                 </div>
               </div>
 

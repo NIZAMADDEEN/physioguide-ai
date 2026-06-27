@@ -562,7 +562,7 @@ export default function WebcamPanel({
           className="position-relative w-100 h-full d-flex align-items-center justify-content-center overflow-hidden"
           style={{ minHeight: "920px" }}
         >
-          {/* Static Video File Layer replacing Live Webcam */}
+          {/* Webcam Video Layer */}
           {hasWebcam !== false ? (
             <video
               ref={videoRef}
@@ -574,13 +574,13 @@ export default function WebcamPanel({
               crossOrigin="anonymous"
               className="position-absolute w-100 h-full"
               style={{
-                objectFit: "fit",
-                transform: "none", // Removed mirroring scaleX(-1) so loaded videos don't read backwards
+                objectFit: "cover",
+                transform: "scaleX(-1)", // Mirror webcam for normal user intuition
                 opacity: 0.75,
               }}
             />
           ) : (
-            // Futuristic Grid Backdrop
+            // Futuristic Grid Backdrop (fallback if webcam permission denied or missing)
             <div
               className="position-absolute inset-0 w-100 h-100"
               style={{
@@ -588,6 +588,7 @@ export default function WebcamPanel({
                   "radial-gradient(circle at center, #112235 0%, #060b13 100%)",
               }}
             >
+              {/* Animated scanning lines and grid nodes */}
               <div
                 className="w-100 h-100 position-absolute opacity-10"
                 style={{
@@ -609,7 +610,7 @@ export default function WebcamPanel({
             style={{
               zIndex: 3,
               pointerEvents: "none",
-              transform: "none",
+              transform: hasWebcam !== false ? "scaleX(-1)" : "none", // Mirror coordinate drawing to match mirrored video
             }}
           />
 
@@ -652,6 +653,26 @@ export default function WebcamPanel({
                     : "CALIBRATING POSE"}
               </span>
             </div>
+
+            {hasWebcam === false && (
+              <div
+                className="backdrop-blur rounded-pill px-3 py-1.5 d-flex align-items-center gap-2 border"
+                style={{
+                  background: "rgba(255, 23, 68, 0.15)",
+                  borderColor: "rgba(255, 23, 68, 0.4)",
+                }}
+              >
+                <span className="material-symbols-outlined text-danger text-label-md">
+                  videocam_off
+                </span>
+                <span
+                  className="text-danger font-bold"
+                  style={{ fontSize: "11px" }}
+                >
+                  Webcam Simulated Overlay
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Bottom Floating Posture Status Message */}
