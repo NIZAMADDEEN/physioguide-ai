@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { ROUTES } from "../utils/constants";
-import { getExerciseById } from "../services/exerciseService";
-import { useExercise } from "../hooks/useExercise";
-import { useSession } from "../hooks/useSession";
-import WebcamPanel from "../components/WebcamPanel";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import FeedbackPanel from "../components/FeedbackPanel";
 import SessionSummaryModal from "../components/SessionSummaryModal";
+import WebcamPanel from "../components/WebcamPanel";
 import Button from "../components/common/Button";
+import { useExercise } from "../hooks/useExercise";
+import { useSession } from "../hooks/useSession";
+import { getExerciseById } from "../services/exerciseService";
+import { ROUTES } from "../utils/constants";
 
 export default function LiveMonitoringPage() {
   const [searchParams] = useSearchParams();
@@ -72,7 +72,7 @@ export default function LiveMonitoringPage() {
       {/* Main Webcam Area - 70-80% of width */}
       <div className="col-12 col-lg-9 d-flex flex-column gap-3">
         {/* Webcam Feed */}
-        <div className="flex-grow-1">
+        <div className="">
           <WebcamPanel
             isActive={cameraActive}
             isPaused={isPaused}

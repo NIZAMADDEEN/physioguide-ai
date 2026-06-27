@@ -4,6 +4,8 @@ import { processFrame } from "../services/sessionService";
 import Button from "./common/Button";
 import Card from "./common/Card";
 
+const videoURL = "./bicep-curls.mp4";
+
 export default function WebcamPanel({
   isActive,
   isPaused,
@@ -18,7 +20,6 @@ export default function WebcamPanel({
   const canvasRef = useRef(null);
   const offscreenCanvasRef = useRef(document.createElement("canvas"));
   const [hasWebcam, setHasWebcam] = useState(null);
-  const [stream, setStream] = useState(null);
   const [lastCVResult, setLastCVResult] = useState(null);
   const cvProcessingRef = useRef(false);
 
@@ -28,45 +29,58 @@ export default function WebcamPanel({
   const animTimeRef = useRef(0);
   const lastFrameTimeRef = useRef(0);
 
-  // ─── Webcam Stream Management ──────────────────────────────────────────────
+  // ─── Video File Stream Management ──────────────────────────────────────────
   useEffect(() => {
-    let activeStream = null;
+    const videoElement = videoRef.current;
 
     if (isActive) {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            width: { ideal: 640 },
-            height: { ideal: 480 },
-            facingMode: "user",
-          },
-        })
-        .then((s) => {
-          setHasWebcam(true);
-          activeStream = s;
-          setStream(s);
-          if (videoRef.current) {
-            videoRef.current.srcObject = s;
-          }
-        })
-        .catch((err) => {
-          console.warn("[WebcamPanel] MediaDevices getUserMedia failed:", err);
-          setHasWebcam(false);
-        });
+      // Mock webcam existence state as valid to pass conditional rendering limits
+      setHasWebcam(true);
+
+      if (videoElement) {
+        // Point target straight to your public root folder asset file
+        videoElement.src = videoURL;
+
+        // Handle playback states gracefully alongside activation flags
+        if (!isPaused) {
+          videoElement
+            .play()
+            .catch((err) =>
+              console.warn(
+                "[WebcamPanel] Autoplay failed or interrupted:",
+                err,
+              ),
+            );
+        }
+      }
     } else {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-        setStream(null);
+      if (videoElement) {
+        videoElement.pause();
+        videoElement.src = "";
       }
       setHasWebcam(null);
     }
 
     return () => {
-      if (activeStream) {
-        activeStream.getTracks().forEach((track) => track.stop());
+      if (videoElement) {
+        videoElement.pause();
+        videoElement.src = "";
       }
     };
   }, [isActive]);
+
+  // Handle Play/Pause programmatic triggers coming from upper panels
+  useEffect(() => {
+    if (!videoRef.current || !isActive) return;
+
+    if (isPaused) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current
+        .play()
+        .catch((err) => console.warn("[WebcamPanel] Play trigger error:", err));
+    }
+  }, [isPaused, isActive]);
 
   // ─── Frame Extraction & Processing Loop ─────────────────────────────────────
   useEffect(() => {
@@ -167,7 +181,7 @@ export default function WebcamPanel({
       if (!isCalibrated) {
         ctx.save();
         ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 0.3;
         ctx.setLineDash([8, 12]);
 
         // Human silhouette guide bounding box
@@ -309,7 +323,7 @@ export default function WebcamPanel({
       ctx.strokeStyle = statusColor;
       ctx.shadowColor = glowColor;
       ctx.shadowBlur = 12;
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 1;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
@@ -371,7 +385,7 @@ export default function WebcamPanel({
           ctx.save();
           ctx.fillStyle = "#ffffff";
           ctx.strokeStyle = statusColor;
-          ctx.lineWidth = 3;
+          ctx.lineWidth = 2;
           ctx.shadowColor = glowColor;
           ctx.shadowBlur = 8;
 
@@ -388,7 +402,7 @@ export default function WebcamPanel({
         ctx.save();
         ctx.fillStyle = statusColor;
         ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 0.3;
 
         const exIdStr = exercise?.id || "";
 
@@ -399,7 +413,6 @@ export default function WebcamPanel({
         if (exIdStr.includes("squat")) {
           indicatorX = lKnee.x - 70;
           indicatorY = lKnee.y;
-          // Draw arc at knee
           ctx.beginPath();
           ctx.arc(lKnee.x, lKnee.y, 25, 0.7 * Math.PI, 1.3 * Math.PI);
           ctx.stroke();
@@ -420,7 +433,7 @@ export default function WebcamPanel({
         // Draw overlay box
         ctx.fillStyle = "rgba(11, 28, 48, 0.85)";
         ctx.strokeStyle = statusColor;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.3;
         ctx.beginPath();
         ctx.roundRect(indicatorX - 10, indicatorY - 22, 68, 32, 4);
         ctx.fill();
@@ -464,7 +477,7 @@ export default function WebcamPanel({
         // Draw overlay box
         ctx.fillStyle = "rgba(11, 28, 48, 0.85)";
         ctx.strokeStyle = statusColor;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.3;
         ctx.beginPath();
         ctx.roundRect(indicatorRX, indicatorRY - 22, 68, 32, 4);
         ctx.fill();
@@ -549,22 +562,25 @@ export default function WebcamPanel({
           className="position-relative w-100 h-full d-flex align-items-center justify-content-center overflow-hidden"
           style={{ minHeight: "920px" }}
         >
-          {/* Webcam Video Layer */}
+          {/* Static Video File Layer replacing Live Webcam */}
           {hasWebcam !== false ? (
             <video
               ref={videoRef}
+              src={videoURL}
               autoPlay
-              playsInline
+              loop
               muted
+              playsInline
+              crossOrigin="anonymous"
               className="position-absolute w-100 h-full"
               style={{
-                objectFit: "cover",
-                transform: "scaleX(-1)", // Mirror webcam for normal user intuition
+                objectFit: "fit",
+                transform: "none", // Removed mirroring scaleX(-1) so loaded videos don't read backwards
                 opacity: 0.75,
               }}
             />
           ) : (
-            // Futuristic Grid Backdrop (fallback if webcam permission denied or missing)
+            // Futuristic Grid Backdrop
             <div
               className="position-absolute inset-0 w-100 h-100"
               style={{
@@ -572,7 +588,6 @@ export default function WebcamPanel({
                   "radial-gradient(circle at center, #112235 0%, #060b13 100%)",
               }}
             >
-              {/* Animated scanning lines and grid nodes */}
               <div
                 className="w-100 h-100 position-absolute opacity-10"
                 style={{
@@ -594,7 +609,7 @@ export default function WebcamPanel({
             style={{
               zIndex: 3,
               pointerEvents: "none",
-              transform: hasWebcam !== false ? "scaleX(-1)" : "none", // Mirror coordinate drawing to match mirrored video
+              transform: "none",
             }}
           />
 
@@ -637,26 +652,6 @@ export default function WebcamPanel({
                     : "CALIBRATING POSE"}
               </span>
             </div>
-
-            {hasWebcam === false && (
-              <div
-                className="backdrop-blur rounded-pill px-3 py-1.5 d-flex align-items-center gap-2 border"
-                style={{
-                  background: "rgba(255, 23, 68, 0.15)",
-                  borderColor: "rgba(255, 23, 68, 0.4)",
-                }}
-              >
-                <span className="material-symbols-outlined text-danger text-label-md">
-                  videocam_off
-                </span>
-                <span
-                  className="text-danger font-bold"
-                  style={{ fontSize: "11px" }}
-                >
-                  Webcam Simulated Overlay
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Bottom Floating Posture Status Message */}
@@ -735,7 +730,7 @@ export default function WebcamPanel({
               className="material-symbols-outlined text-primary"
               style={{ fontSize: "42px" }}
             >
-              videocam
+              movie
             </span>
           </div>
           <h3 className="font-bold mb-2" style={{ fontSize: "22px" }}>
@@ -745,16 +740,16 @@ export default function WebcamPanel({
             className="text-on-surface-variant mb-4"
             style={{ fontSize: "14px", lineHeight: "1.5" }}
           >
-            Position your camera so your entire torso and joints are clearly
-            visible in the frame.
+            Press start to process the preloaded shoulder press target run video
+            through the AI detection layout framework.
           </p>
           <Button
             size="lg"
-            icon="videocam"
+            icon="play_arrow"
             onClick={onStart}
             className="px-5 py-3 shadow-primary"
           >
-            Enable Camera & Start
+            Start Video Session
           </Button>
         </div>
       )}
