@@ -14,7 +14,7 @@ export default function Sidebar() {
       <div className="p-4 border-bottom border-outline-variant">
         <Link to={ROUTES.DASHBOARD} className="text-decoration-none">
           <span className="text-headline-md font-bold text-primary">
-            PhysioGuide AI
+            VirtuGym
           </span>
         </Link>
       </div>

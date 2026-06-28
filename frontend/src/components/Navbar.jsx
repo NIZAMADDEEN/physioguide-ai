@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTES } from "../utils/constants";
 import { useAuth } from "../hooks/useAuth";
+import { ROUTES } from "../utils/constants";
 
 /**
  * Navbar Component (Public facing)
@@ -67,9 +67,9 @@ export default function Navbar() {
           to={ROUTES.HOME}
           className="text-headline-md font-headline-md font-bold text-primary no-underline"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          aria-label="PhysioGuide AI — Go to top"
+          aria-label="VirtuGym — Go to top"
         >
-          PhysioGuide AI
+          VirtuGym
         </Link>
 
         {/* Desktop nav */}

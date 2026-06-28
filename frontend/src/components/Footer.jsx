@@ -4,11 +4,10 @@ export default function Footer() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-gutter px-margin-mobile md:px-xl max-w-container-max mx-auto">
         <div>
           <div className="text-headline-sm font-headline-sm text-gray-200 dark:text-inverse-on-surface font-bold mb-md">
-            PhysioGuide AI
+            VirtuGym
           </div>
           <p className="text-label-sm font-label-sm text-white dark:text-surface-variant max-w-xs">
-            &copy; 2026 PhysioGuide AI. Precision recovery powered by computer
-            vision.
+            &copy; 2026 VirtuGym.
           </p>
         </div>
         <div className="flex flex-col gap-xs">
@@ -62,7 +61,7 @@ export default function Footer() {
             Contact
           </span>
           <div className="text-white dark:text-surface-variant text-label-sm">
-            support@physioguide.ai
+            support@virtugym.ai
           </div>
           <div className="flex gap-sm mt-xs">
             <button className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">

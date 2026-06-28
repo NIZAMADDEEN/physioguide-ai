@@ -1,17 +1,17 @@
-# PhysioGuide AI
+# VirtuGym
 
-PhysioGuide AI is a computer vision-powered physical therapy application that provides real-time posture tracking, exercise feedback, and clinical reporting using Google MediaPipe and React.
+VirtuGym delivers professional AI physiotherapy and rehabilitation in your own home. Benefit from real-time pose tracking, smart exercise logging, and detailed progress insights
 
 ## System Architecture
 
 The application is split into two independent services:
 
-### 1. Frontend (`/physioguide-ai/frontend`)
+### 1. Frontend (`/virtu-gym/frontend`)
 - **Framework:** React 19 + Vite
 - **Styling:** Tailwind CSS + Vanilla CSS + Bootstrap 5
 - **Features:** Webcam rendering, dashboard charts, real-time feedback UI.
 
-### 2. Backend (`/physioguide-ai/backend`)
+### 2. Backend (`/virtu-gym/backend`)
 - **Framework:** Flask + SQLAlchemy
 - **Database:** SQLite
 - **Computer Vision:** MediaPipe (Pose Detection), OpenCV, NumPy
@@ -21,7 +21,7 @@ The application is split into two independent services:
 ## Local Development Setup
 
 ### Backend Setup
-1. Navigate to the backend directory: `cd physioguide-ai/backend`
+1. Navigate to the backend directory: `cd virtu-gym/backend`
 2. Create a virtual environment: `python -m venv .venv`
 3. Activate the environment:
    - Windows: `.venv\Scripts\activate`
@@ -31,7 +31,7 @@ The application is split into two independent services:
 6. Run the server: `python app.py` (Runs on `http://localhost:5000`)
 
 ### Frontend Setup
-1. Navigate to the frontend directory: `cd physioguide-ai/frontend`
+1. Navigate to the frontend directory: `cd virtu-gym/frontend`
 2. Install dependencies: `npm install`
 3. Copy `.env.example` to `.env.local`
 4. Start the Vite dev server: `npm run dev` (Runs on `http://localhost:5173`)

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 export default function TestimonialsSection() {
@@ -237,7 +237,7 @@ export default function TestimonialsSection() {
                     required
                     rows="4"
                     className="w-full bg-surface-container-highest border border-outline-variant rounded-lg p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
-                    placeholder='"PhysioGuide AI helped me..."'
+                    placeholder='"VirtuGym helped me..."'
                   ></textarea>
                 </div>
               </div>

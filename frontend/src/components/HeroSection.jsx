@@ -13,7 +13,8 @@ export default function HeroSection() {
           </div>
           <h1 className="font-display-lg text-display-lg md:text-[56px] leading-tight text-on-surface">
             Recover Smarter with{" "}
-            <span className="text-primary">AI Physiotherapy</span> Guidance
+            <span className="text-primary">Realtime Physiotherapy</span>{" "}
+            Guidance
           </h1>
           <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto md:mx-0">
             Professional rehabilitation from the comfort of home. Our AI
@@ -33,7 +34,7 @@ export default function HeroSection() {
         <div className="flex-1 w-full max-w-2xl relative scroll-reveal">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
             <img
-              alt="Physiotherapy session with AI overlay"
+              alt="Physiotherapy session with realtime overlay"
               className="w-full h-auto object-cover aspect-video"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAduGkzaiET5TGJxDJGaMhO2CujxyHyalhPs9cYTMvwtqqqUBT4CS8YeWoLKtupiMK_RhtiK3_QQ-S7U6zMqQn7zWkeyAXzn5ykJp7YewvxU5byiEaSyVuqze5U8PbhuK0fX5VDI1rKpsa5vjqnCzJEewu5xyI9x_5SS7DuCLCvO5Rqh1HibgHtYyOu1hPXWAdtg4z3E2zIHMRsnHOOp89TcY2TeSWCz-sxftH4JLGBSQAavGCvwThm3tp76F-2lUud5xZSawlx2PB0"
             />
