@@ -64,12 +64,12 @@ export default function Footer() {
             support@virtugym.ai
           </div>
           <div className="flex gap-sm mt-xs">
-            <button className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+            <button className="w-8 h-8 rounded-full  flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
               <span className="material-symbols-outlined text-[18px]">
                 share
               </span>
             </button>
-            <button className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
+            <button className="w-8 h-8 rounded-full  flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all">
               <span className="material-symbols-outlined text-[18px]">
                 alternate_email
               </span>

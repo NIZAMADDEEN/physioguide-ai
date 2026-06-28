@@ -69,7 +69,7 @@ export default function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="VirtuGym — Go to top"
         >
-          VirtuGym
+          <img src="./favicon-32x32.png" />
         </Link>
 
         {/* Desktop nav */}

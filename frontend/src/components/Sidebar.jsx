@@ -14,7 +14,7 @@ export default function Sidebar() {
       <div className="p-4 border-bottom border-outline-variant">
         <Link to={ROUTES.DASHBOARD} className="text-decoration-none">
           <span className="text-headline-md font-bold text-primary">
-            VirtuGym
+            <img src="./favicon-32x32.png" />
           </span>
         </Link>
       </div>
