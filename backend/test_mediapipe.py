@@ -2,7 +2,7 @@
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-print("=== PhysioGuide AI CV Module Tests (pure-Python) ===\n")
+print("=== VirtuGym CV Module Tests (pure-Python) ===\n")
 
 # --- angle_calculator ---
 from services.angle_calculator import calculate_angle, calculate_joint_angles

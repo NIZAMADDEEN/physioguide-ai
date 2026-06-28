@@ -1,5 +1,5 @@
 """
-routes/cv.py — Computer Vision API endpoints for PhysioGuide AI.
+routes/cv.py — Computer Vision API endpoints for VirtuGym.
 
 Blueprint: cv_bp  →  registered at  /api/cv
 

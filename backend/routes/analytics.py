@@ -158,7 +158,7 @@ def get_timeline():
             'id': 'timeline-welcome',
             'date': datetime.utcnow().isoformat(),
             'type': 'system',
-            'title': 'Welcome to PhysioGuide AI',
+            'title': 'Welcome to VirtuGym',
             'detail': 'Your posture-tracking therapy plan is configured and ready.',
             'status': 'info'
         })

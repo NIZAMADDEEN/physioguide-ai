@@ -38,7 +38,7 @@ def create_app():
 
     @app.route('/health', methods=['GET'])
     def health_check():
-        return jsonify({'status': 'healthy', 'message': 'PhysioGuide AI Backend is running'}), 200
+        return jsonify({'status': 'healthy', 'message': 'VirtuGym Backend is running'}), 200
 
     # Database creation & Seeding
     with app.app_context():

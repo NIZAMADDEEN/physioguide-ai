@@ -5,7 +5,7 @@ import requests
 
 def test_backend():
     base_url = "http://127.0.0.1:5000/api"
-    print("=== Testing PhysioGuide AI Flask Backend ===")
+    print("=== Testing VirtuGym AI Flask Backend ===")
     
     # 1. Health check
     try:
@@ -18,7 +18,7 @@ def test_backend():
     # 2. Register
     reg_payload = {
         "name": "Validation User",
-        "email": f"test_{int(time.time())}@physioguide.ai",
+        "email": f"test_{int(time.time())}@virtugym.ai",
         "password": "securepassword123"
     }
     r = requests.post(f"{base_url}/auth/register", json=reg_payload)

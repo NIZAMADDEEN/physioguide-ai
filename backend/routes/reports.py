@@ -45,5 +45,5 @@ def export_report_pdf(id):
         pdf_buffer,
         mimetype='application/pdf',
         as_attachment=True,
-        download_name=f"PhysioGuide_Report_{id}.pdf"
+        download_name=f"VirtuGym_Report_{id}.pdf"
     )

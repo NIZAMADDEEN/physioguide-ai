@@ -56,7 +56,7 @@ def generate_report_pdf(report_obj, session_history):
     )
     
     # Document title
-    story.append(Paragraph("PhysioGuide AI — Clinical Therapy Report", title_style))
+    story.append(Paragraph("VirtuGym — Clinical Therapy Report", title_style))
     story.append(Spacer(1, 5))
     
     # Metadata block
