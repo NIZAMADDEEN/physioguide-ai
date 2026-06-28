@@ -199,6 +199,19 @@ a:hover, button:hover {
   text-decoration: none !important;
 }
 
+.table,
+.table tbody,
+.table th,
+.table tr,
+.table td {
+  background-color: var(--color-background) !important;
+}
+
+
+
+
+
+
 /* --- Material Symbols --- */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined', sans-serif;

@@ -41,7 +41,7 @@ export const CHART_COLORS = {
 export const SIDEBAR_NAV = [
   { label: "Dashboard", icon: "dashboard", path: ROUTES.DASHBOARD },
   { label: "Exercises", icon: "fitness_center", path: ROUTES.EXERCISES },
-  { label: "Live Monitoring", icon: "videocam", path: ROUTES.MONITORING },
+  // { label: "Live Monitoring", icon: "videocam", path: ROUTES.MONITORING },
   { label: "Analytics", icon: "analytics", path: ROUTES.ANALYTICS },
   { label: "Reports", icon: "clinical_notes", path: ROUTES.REPORTS },
   { label: "Profile", icon: "person", path: ROUTES.PROFILE },
