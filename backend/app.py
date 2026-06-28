@@ -60,24 +60,24 @@ def seed_exercises():
             id='squats',
             name='Squats',
             category='Knee Rehab',
-            reps=12,
-            duration='3 sets of 12 reps',
+            reps=8,
+            duration='3 sets of 8 reps',
             description='Slowly lower your hips by flexing your knees, keeping your back straight and heels flat on the floor. Raise back up to start.'
         ),
         Exercise(
             id='bicep-curls',
             name='Bicep Curls',
             category='Upper Body Mobility',
-            reps=10,
-            duration='3 sets of 10 reps',
+            reps=8,
+            duration='3 sets of 8 reps',
             description='Stand straight with arms at your side. Bend at the elbows to bring your hands to your shoulders, focusing on contracting the biceps.'
         ),
         Exercise(
             id='shoulder-press',
             name='Shoulder Press',
             category='Upper Body Mobility',
-            reps=10,
-            duration='3 sets of 10 reps',
+            reps=8,
+            duration='3 sets of 8 reps',
             description='Press hands vertically upwards from shoulder level until your arms are fully extended overhead. Return slowly to shoulder height.'
         )
     ]

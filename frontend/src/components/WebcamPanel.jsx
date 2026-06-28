@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "../hooks/useSession";
 import { processFrame } from "../services/sessionService";
 import Button from "./common/Button";
 import Card from "./common/Card";
-
-const videoURL = "./bicep-curls.mp4";
 
 export default function WebcamPanel({
   isActive,
@@ -29,6 +27,10 @@ export default function WebcamPanel({
   const animTimeRef = useRef(0);
   const lastFrameTimeRef = useRef(0);
 
+  const currentVideoUrl = useMemo(() => {
+    return exercise?.id + ".mp4";
+  }, [exercise?.id]);
+
   // ─── Video File Stream Management ──────────────────────────────────────────
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -39,7 +41,7 @@ export default function WebcamPanel({
 
       if (videoElement) {
         // Point target straight to your public root folder asset file
-        videoElement.src = videoURL;
+        videoElement.src = currentVideoUrl;
 
         // Handle playback states gracefully alongside activation flags
         if (!isPaused) {
@@ -566,9 +568,8 @@ export default function WebcamPanel({
           {hasWebcam !== false ? (
             <video
               ref={videoRef}
-              src={videoURL}
+              src={currentVideoUrl}
               autoPlay
-              loop
               muted
               playsInline
               crossOrigin="anonymous"

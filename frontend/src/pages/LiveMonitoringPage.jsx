@@ -36,12 +36,17 @@ export default function LiveMonitoringPage() {
   } = useSession();
 
   const [showSummary, setShowSummary] = useState(false);
+  // Guard state to prevent the initialization hook from auto-starting a new session
+  const [isEnding, setIsEnding] = useState(false);
 
   useEffect(() => {
     if (!exerciseId) {
       navigate(ROUTES.EXERCISES);
       return;
     }
+
+    // If we are intentionally wrapping up the session, don't trigger a restart
+    if (isEnding) return;
 
     if (!selectedExercise || !activeSession) {
       getExerciseById(exerciseId).then((data) => {
@@ -52,16 +57,25 @@ export default function LiveMonitoringPage() {
         }
       });
     }
-  }, [exerciseId, selectedExercise, activeSession, startSession, navigate]);
+  }, [
+    exerciseId,
+    selectedExercise,
+    activeSession,
+    startSession,
+    navigate,
+    isEnding,
+  ]);
 
-  const handleEndSession = () => {
-    endSession();
-    setShowSummary(true);
+  const handleEndSession = async () => {
+    setIsEnding(true); // Flag that we are purposefully leaving the live tracking state loop
+    await endSession(); // Wait for data computation & state resetting to conclude in context
+    setShowSummary(true); // Safely open the summary modal
   };
 
   const handleFinish = () => {
     setShowSummary(false);
     clearSessionSummary();
+    setIsEnding(false); // Reset the loop flag
     navigate(ROUTES.DASHBOARD);
   };
 
