@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { ROUTES } from "../utils/constants";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 import InputField from "../components/common/InputField";
-import Button from "../components/common/Button";
+import { useAuth } from "../hooks/useAuth";
+import { ROUTES } from "../utils/constants";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

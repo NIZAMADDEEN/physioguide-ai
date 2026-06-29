@@ -11,10 +11,10 @@ export default function Sidebar() {
   return (
     <aside className="pg-sidebar d-flex flex-column h-100 bg-surface-lowest border-end border-outline-variant">
       {/* Brand */}
-      <div className="p-4 border-bottom border-outline-variant">
+      <div className="border-bottom border-outline-variant h-18 grid items-center px-6">
         <Link to={ROUTES.DASHBOARD} className="text-decoration-none">
           <span className="text-headline-md font-bold text-primary">
-            <img src="./favicon-32x32.png" />
+            <img src="./logo.png" className="h-10 " />
           </span>
         </Link>
       </div>

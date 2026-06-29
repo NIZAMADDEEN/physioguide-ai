@@ -59,7 +59,7 @@ export default function Navbar() {
   return (
     <header
       ref={navRef}
-      className={`fixed top-0 w-full z-50 transition-colors duration-300 ${scrolled ? "bg-surface/95 dark:bg-surface-dim/95 backdrop-blur-md shadow-sm border-b border-outline-variant" : "bg-transparent"}`}
+      className={`fixed top-0 w-full z-50 transition-colors duration-300 ${scrolled ? "bg-surface/50  backdrop-blur-md shadow-sm border-b border-outline-variant" : "bg-transparent"}`}
       role="banner"
     >
       <div className="flex justify-between items-center px-margin-mobile md:px-xl h-20 max-w-container-max mx-auto">
@@ -69,7 +69,7 @@ export default function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="VirtuGym — Go to top"
         >
-          <img src="./favicon-32x32.png" />
+          <img src="./logo.png" className="h-12" />
         </Link>
 
         {/* Desktop nav */}

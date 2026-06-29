@@ -45,6 +45,7 @@ export const SIDEBAR_NAV = [
   { label: "Analytics", icon: "analytics", path: ROUTES.ANALYTICS },
   { label: "Reports", icon: "clinical_notes", path: ROUTES.REPORTS },
   { label: "Profile", icon: "person", path: ROUTES.PROFILE },
+  { label: "Home", icon: "home", path: ROUTES.HOME },
 ];
 
 // Status variants

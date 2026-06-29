@@ -1,25 +1,25 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ROUTES } from "./utils/constants";
 
+import ErrorBoundary from "./components/ErrorBoundary";
 import { AuthProvider } from "./context/AuthContext";
 import { ExerciseProvider } from "./context/ExerciseContext";
 import { SessionProvider } from "./context/SessionContext";
 import { VoiceCoachProvider } from "./context/VoiceCoachContext";
-import ErrorBoundary from "./components/ErrorBoundary";
 
-import PublicLayout from "./layouts/PublicLayout";
 import AppLayout from "./layouts/AppLayout";
+import PublicLayout from "./layouts/PublicLayout";
 
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
+import AnalyticsPage from "./pages/AnalyticsPage";
 import DashboardPage from "./pages/DashboardPage";
 import ExerciseSelectionPage from "./pages/ExerciseSelectionPage";
 import LiveMonitoringPage from "./pages/LiveMonitoringPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import ReportPage from "./pages/ReportPage";
 import ProfilePage from "./pages/ProfilePage";
+import ReportPage from "./pages/ReportPage";
 
 function App() {
   return (

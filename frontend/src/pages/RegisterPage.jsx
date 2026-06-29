@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { ROUTES } from "../utils/constants";
+import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 import InputField from "../components/common/InputField";
-import Button from "../components/common/Button";
+import { useAuth } from "../hooks/useAuth";
+import { ROUTES } from "../utils/constants";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({

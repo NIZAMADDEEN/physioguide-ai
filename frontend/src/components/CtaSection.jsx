@@ -1,9 +1,9 @@
 export default function CtaSection() {
   return (
-    <section className="py-xl scroll-reveal">
+    <section className="py-xl scroll-reveal my-44">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-xl">
-        <div className="bg-primary rounded-3xl p-xl text-center text-on-primary relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+        <div className="bg-on-surface-variant rounded-3xl p-xl text-center text-on-primary relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 from-white via-transparent to-transparent"></div>
           <div className="relative z-10 space-y-md">
             <h2 className="text-display-lg font-display-lg">
               Ready to start your recovery?
