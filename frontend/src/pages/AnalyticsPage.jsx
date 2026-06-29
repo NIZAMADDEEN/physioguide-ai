@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useSession } from "../hooks/useSession";
-import Card from "../components/common/Card";
-import Loader from "../components/common/Loader";
-import RecoveryLineChart from "../components/charts/RecoveryLineChart";
-import MobilityDoughnut from "../components/charts/MobilityDoughnut";
+import ChartCard from "../components/ChartCard";
 import ExerciseBarChart from "../components/charts/ExerciseBarChart";
 import ExerciseDistributionPie from "../components/charts/ExerciseDistributionPie";
+import MobilityDoughnut from "../components/charts/MobilityDoughnut";
+import RecoveryLineChart from "../components/charts/RecoveryLineChart";
+import Card from "../components/common/Card";
 import DataTable from "../components/common/DataTable";
-import ChartCard from "../components/ChartCard";
+import Loader from "../components/common/Loader";
+import { useSession } from "../hooks/useSession";
 
 export default function AnalyticsPage() {
   const [range, setRange] = useState(30); // 7, 30, 90
@@ -22,6 +22,8 @@ export default function AnalyticsPage() {
 
   // Slice progressData based on selected range (7, 30, 90)
   const slicedProgressData = progressData ? progressData.slice(-range) : [];
+
+  console.log("in comp", mobilityScores);
 
   return (
     <div className="d-flex flex-column gap-4">
@@ -89,14 +91,14 @@ export default function AnalyticsPage() {
                     key={i}
                     className="d-flex justify-content-between text-label-md py-2"
                   >
-                    <span className="font-bold">{item.region}</span>
+                    <span className="font-bold">{item.joint}</span>
                     <span
                       className={
-                        item.change >= 0 ? "text-secondary" : "text-error"
+                        item.score >= 0 ? "text-secondary" : "text-error"
                       }
                     >
-                      {item.change > 0 ? "+" : ""}
-                      {item.change}%
+                      {item.score > 0 ? "+" : ""}
+                      {item.score}%
                     </span>
                   </div>
                 ))}

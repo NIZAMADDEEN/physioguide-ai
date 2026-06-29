@@ -1,4 +1,4 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { CHART_COLORS } from "../../utils/constants";
 
@@ -7,7 +7,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function MobilityDoughnut({ data }) {
   if (!data || data.length === 0) return <div>No data available</div>;
 
-  const labels = data.map((d) => d.region);
+  const labels = data.map((d) => d.joint);
   const scores = data.map((d) => d.score);
 
   // Map our design tokens to a palette for the doughnut chart

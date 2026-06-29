@@ -1,25 +1,24 @@
 import {
   createContext,
-  useState,
-  useEffect,
-  useMemo,
   useCallback,
   useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
-import { AuthContext } from "./AuthContext";
-import { ExerciseContext } from "./ExerciseContext";
 import {
-  startSession as startSessionApi,
   endSession as endSessionApi,
-  updateSessionMetrics,
-  getProgressData,
-  getMobilityScores,
-  getWeeklyExercises,
-  getTimeline,
-  getSummaryStats,
   getExerciseDistribution,
+  getMobilityScores,
+  getProgressData,
+  getSummaryStats,
+  getTimeline,
+  getWeeklyExercises,
+  startSession as startSessionApi,
   startTracker,
 } from "../services/sessionService";
+import { AuthContext } from "./AuthContext";
+import { ExerciseContext } from "./ExerciseContext";
 
 export const SessionContext = createContext(null);
 
@@ -111,6 +110,7 @@ export function SessionProvider({ children }) {
           ? distributionResult.value
           : [];
 
+      console.log(mobility);
       setProgressData(progress);
       setMobilityScores(mobility);
       setWeeklyExercises(weekly);
