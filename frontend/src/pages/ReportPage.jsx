@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useApi } from "../hooks/useApi";
-import { getReports, exportPdf } from "../services/reportService";
-import { formatDate } from "../utils/helpers";
-import Card from "../components/common/Card";
-import Loader from "../components/common/Loader";
-import StatusChip from "../components/common/StatusChip";
 import Button from "../components/common/Button";
-import Modal from "../components/common/Modal";
+import Card from "../components/common/Card";
 import DataTable from "../components/common/DataTable";
+import Loader from "../components/common/Loader";
+import Modal from "../components/common/Modal";
+import StatusChip from "../components/common/StatusChip";
 import ReportCard from "../components/ReportCard";
+import { useApi } from "../hooks/useApi";
+import { exportPdf, getReports } from "../services/reportService";
+import { formatDate } from "../utils/helpers";
 
 export default function ReportPage() {
   const { data: reports, loading } = useApi(getReports);
@@ -82,11 +82,6 @@ export default function ReportPage() {
             Review detailed assessments, milestone evaluations, and notes shared
             by your physical therapist.
           </p>
-        </div>
-        <div className="position-relative z-1">
-          <Button variant="white" icon="filter_list">
-            Filter Reports
-          </Button>
         </div>
       </div>
 

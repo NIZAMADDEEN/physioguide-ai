@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import InputField from "../components/common/InputField";
+import Loader from "../components/common/Loader";
+import ExerciseCard from "../components/ExerciseCard";
 import { useExercise } from "../hooks/useExercise";
 import { useSession } from "../hooks/useSession";
 import { ROUTES } from "../utils/constants";
-import Loader from "../components/common/Loader";
-import InputField from "../components/common/InputField";
-import ExerciseCard from "../components/ExerciseCard";
 
 export default function ExerciseSelectionPage() {
   const { exercises, filters, loading, setCategoryFilter, setSearchQuery } =

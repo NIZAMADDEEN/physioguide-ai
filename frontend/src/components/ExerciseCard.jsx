@@ -1,5 +1,5 @@
-import Card from "./common/Card";
 import Button from "./common/Button";
+import Card from "./common/Card";
 
 export default function ExerciseCard({ exercise, onStart, isStarting }) {
   const getDifficultyColor = (diff) => {
@@ -20,7 +20,7 @@ export default function ExerciseCard({ exercise, onStart, isStarting }) {
       elevation={2}
       padding="0"
       hoverable
-      className="h-100 d-flex flex-column overflow-hidden"
+      className="h-100 d-flex flex-column overflow-hidden shadow-none"
     >
       {/* Image Placeholder */}
       <div

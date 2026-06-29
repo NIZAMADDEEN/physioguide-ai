@@ -167,7 +167,7 @@ export default function LiveMonitoringPage() {
                     variant="secondary"
                     icon="pause"
                     onClick={pauseSession}
-                    className="px-4 bg-warning text-dark border-warning"
+                    className="px-4 bg-warning text-white border-warning"
                   >
                     Pause
                   </Button>

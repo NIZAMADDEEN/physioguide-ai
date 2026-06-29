@@ -557,7 +557,7 @@ export default function WebcamPanel({
       padding="0"
       className="flex-grow-1 overflow-hidden position-relative bg-inverse-surface d-flex flex-column align-items-center justify-content-center border-0 shadow-sm"
       style={{
-        minHeight: "920px",
+        minHeight: "700px",
         borderRadius: "var(--radius-xl)",
         background: "#0a121d",
       }}
@@ -582,14 +582,13 @@ export default function WebcamPanel({
                 : "0 0 20px rgba(0, 243, 255, 0.15) inset"
               : "none",
           pointerEvents: "none",
-          zIndex: 5,
         }}
       />
 
       {isActive ? (
         <div
           className="position-relative w-100 h-full d-flex align-items-center justify-content-center overflow-hidden"
-          style={{ minHeight: "920px" }}
+          style={{ minHeight: "700px" }}
         >
           {/* Webcam Video Layer */}
           {hasWebcam !== false ? (
