@@ -368,10 +368,7 @@ export default function FeedbackPanel({
           </span>
         </div>
 
-        <div
-          className="flex-grow-1 overflow-y-auto pe-1"
-          style={{ maxHeight: "120px" }}
-        >
+        <div className="h-full overflow-y-auto pe-1">
           {!cameraActive ? (
             <div className="text-center text-outline-variant py-4">
               <span

@@ -23,8 +23,6 @@ export default function AnalyticsPage() {
   // Slice progressData based on selected range (7, 30, 90)
   const slicedProgressData = progressData ? progressData.slice(-range) : [];
 
-  console.log("in comp", mobilityScores);
-
   return (
     <div className="d-flex flex-column gap-4">
       {/* Header & Date Range Filter */}

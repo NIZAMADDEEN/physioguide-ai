@@ -110,7 +110,6 @@ export function SessionProvider({ children }) {
           ? distributionResult.value
           : [];
 
-      console.log(mobility);
       setProgressData(progress);
       setMobilityScores(mobility);
       setWeeklyExercises(weekly);
