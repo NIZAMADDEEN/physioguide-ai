@@ -98,110 +98,111 @@ export default function LiveMonitoringPage() {
   };
 
   return (
-    <div className="row g-3 h-100 align-items-stretch">
-      {/* Main Webcam Area - 70-80% of width */}
-      <div className="col-12 col-lg-9 d-flex flex-column gap-3">
-        {/* Webcam Feed */}
-        <div className="">
-          <WebcamPanel
-            isActive={cameraActive}
-            isPaused={isPaused}
-            reps={reps}
-            statusMsg={statusMsg}
-            accuracy={accuracy}
+    <>
+      <div className="row g-3 h-100 align-items-stretch ">
+        {/* Main Webcam Area - 70-80% of width */}
+        <div className="col-12 col-lg-9 d-flex flex-column gap-3">
+          {/* Webcam Feed */}
+          <div className="">
+            <WebcamPanel
+              isActive={cameraActive}
+              isPaused={isPaused}
+              reps={reps}
+              statusMsg={statusMsg}
+              accuracy={accuracy}
+              exercise={selectedExercise}
+              isCalibrated={isCalibrated}
+              handleEndSession={handleEndSession}
+              cameraMode={cameraMode}
+              startDemo={startDemo}
+              startLive={startLive}
+            />
+          </div>
+
+          {/* Bottom Control Panel */}
+          <div
+            className="d-flex justify-content-center align-items-center gap-3 p-3 rounded-3 border"
+            style={{
+              background: "var(--color-surface-container)",
+              minHeight: "70px",
+            }}
+          >
+            {!cameraActive ? (
+              <div className="d-flex gap-3">
+                <Button
+                  size="lg"
+                  variant="primary"
+                  icon="movie"
+                  onClick={startDemo}
+                  className="px-4"
+                >
+                  Demo Video
+                </Button>
+
+                <Button
+                  size="lg"
+                  variant="primary"
+                  icon="videocam"
+                  onClick={startLive}
+                  className="px-4"
+                >
+                  Live Webcam
+                </Button>
+              </div>
+            ) : (
+              <div className="d-flex gap-3 w-100 justify-content-center">
+                {isPaused ? (
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    icon="play_arrow"
+                    onClick={resumeSession}
+                    className="px-4 bg-success text-white border-success"
+                  >
+                    Resume
+                  </Button>
+                ) : (
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    icon="pause"
+                    onClick={pauseSession}
+                    className="px-4 bg-warning text-dark border-warning"
+                  >
+                    Pause
+                  </Button>
+                )}
+                <Button
+                  size="lg"
+                  variant="outline-white"
+                  icon="stop"
+                  onClick={handleEndSession}
+                  className="px-4 bg-danger text-white border-danger"
+                >
+                  Stop
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Feedback Sidebar - 20-30% of width */}
+        <div
+          className="col-12 col-lg-3"
+          style={{ minHeight: "100vh", overflowY: "auto" }}
+        >
+          <FeedbackPanel
             exercise={selectedExercise}
-            isCalibrated={isCalibrated}
-            handleEndSession={handleEndSession}
-            cameraMode={cameraMode}
-            startDemo={startDemo}
-            startLive={startLive}
+            reps={reps}
+            accuracy={accuracy}
+            sessionDuration={sessionDuration}
+            isPaused={isPaused}
+            corrections={corrections}
+            successNotifications={successNotifications}
+            cameraActive={cameraActive}
           />
         </div>
-
-        {/* Bottom Control Panel */}
-        <div
-          className="d-flex justify-content-center align-items-center gap-3 p-3 rounded-3 border"
-          style={{
-            background: "var(--color-surface-container)",
-            minHeight: "70px",
-          }}
-        >
-          {!cameraActive ? (
-            <div className="d-flex gap-3">
-              <Button
-                size="lg"
-                variant="primary"
-                icon="movie"
-                onClick={startDemo}
-                className="px-4"
-              >
-                Demo Video
-              </Button>
-
-              <Button
-                size="lg"
-                variant="primary"
-                icon="videocam"
-                onClick={startLive}
-                className="px-4"
-              >
-                Live Webcam
-              </Button>
-            </div>
-          ) : (
-            <div className="d-flex gap-3 w-100 justify-content-center">
-              {isPaused ? (
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  icon="play_arrow"
-                  onClick={resumeSession}
-                  className="px-4 bg-success text-white border-success"
-                >
-                  Resume
-                </Button>
-              ) : (
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  icon="pause"
-                  onClick={pauseSession}
-                  className="px-4 bg-warning text-dark border-warning"
-                >
-                  Pause
-                </Button>
-              )}
-              <Button
-                size="lg"
-                variant="outline-white"
-                icon="stop"
-                onClick={handleEndSession}
-                className="px-4 bg-danger text-white border-danger"
-              >
-                Stop
-              </Button>
-            </div>
-          )}
-        </div>
       </div>
-
-      {/* Feedback Sidebar - 20-30% of width */}
-      <div
-        className="col-12 col-lg-3"
-        style={{ minHeight: "100vh", overflowY: "auto" }}
-      >
-        <FeedbackPanel
-          exercise={selectedExercise}
-          reps={reps}
-          accuracy={accuracy}
-          sessionDuration={sessionDuration}
-          isPaused={isPaused}
-          corrections={corrections}
-          successNotifications={successNotifications}
-          cameraActive={cameraActive}
-        />
-      </div>
-
       {/* Summary Modal on Session End */}
       <SessionSummaryModal
         isOpen={showSummary}
@@ -209,6 +210,6 @@ export default function LiveMonitoringPage() {
         onFinish={handleFinish}
         sessionData={lastSessionSummary}
       />
-    </div>
+    </>
   );
 }

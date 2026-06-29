@@ -555,7 +555,7 @@ export default function WebcamPanel({
   return (
     <Card
       padding="0"
-      className="flex-grow-1 overflow-hidden position-relative bg-inverse-surface d-flex flex-column align-items-center justify-content-center border-0 shadow-lg"
+      className="flex-grow-1 overflow-hidden position-relative bg-inverse-surface d-flex flex-column align-items-center justify-content-center border-0 shadow-sm"
       style={{
         minHeight: "920px",
         borderRadius: "var(--radius-xl)",
@@ -603,7 +603,6 @@ export default function WebcamPanel({
               className="position-absolute w-100 h-full"
               style={{
                 objectFit: "cover",
-                transform: "scaleX(-1)", // Mirror webcam for normal user intuition
                 opacity: 0.75,
               }}
             />
@@ -638,7 +637,6 @@ export default function WebcamPanel({
             style={{
               zIndex: 3,
               pointerEvents: "none",
-              transform: hasWebcam !== false ? "scaleX(-1)" : "none", // Mirror coordinate drawing to match mirrored video
             }}
           />
 
