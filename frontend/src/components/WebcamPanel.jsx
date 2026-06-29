@@ -789,8 +789,8 @@ export default function WebcamPanel({
             className="text-on-surface-variant mb-4"
             style={{ fontSize: "14px", lineHeight: "1.5" }}
           >
-            Press start to process the preloaded shoulder press target run video
-            through the AI detection layout framework.
+            Choose Demo Video to play the sample exercise, or Live Webcam to
+            perform the exercise using your own camera.
           </p>
           <div className="flex gap-3 justify-center">
             <Button

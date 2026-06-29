@@ -113,6 +113,8 @@ export default function LiveMonitoringPage() {
             isCalibrated={isCalibrated}
             handleEndSession={handleEndSession}
             cameraMode={cameraMode}
+            startDemo={startDemo}
+            startLive={startLive}
           />
         </div>
 
