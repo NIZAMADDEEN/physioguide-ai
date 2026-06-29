@@ -7,12 +7,15 @@ import Card from "./common/Card";
 export default function WebcamPanel({
   isActive,
   isPaused,
-  onStart,
   reps,
   statusMsg,
   accuracy,
   exercise,
   isCalibrated,
+  handleEndSession,
+  cameraMode,
+  startDemo,
+  startLive,
 }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -31,45 +34,47 @@ export default function WebcamPanel({
     return exercise?.id + ".mp4";
   }, [exercise?.id]);
 
-  // ─── Video File Stream Management ──────────────────────────────────────────
   useEffect(() => {
-    const videoElement = videoRef.current;
+    const video = videoRef.current;
+    if (!video) return;
 
-    if (isActive) {
-      // Mock webcam existence state as valid to pass conditional rendering limits
+    const stopStream = () => {
+      if (video.srcObject) {
+        video.srcObject.getTracks().forEach((track) => track.stop());
+        video.srcObject = null;
+      }
+
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+    };
+
+    const setupVideo = async () => {
+      if (!isActive) {
+        stopStream();
+        setHasWebcam(null);
+        return;
+      }
+
       setHasWebcam(true);
 
-      if (videoElement) {
-        // Point target straight to your public root folder asset file
-        videoElement.src = currentVideoUrl;
-
-        // Handle playback states gracefully alongside activation flags
-        if (!isPaused) {
-          videoElement
-            .play()
-            .catch((err) =>
-              console.warn(
-                "[WebcamPanel] Autoplay failed or interrupted:",
-                err,
-              ),
-            );
-        }
+      if (cameraMode === "webcam") {
+        video.srcObject = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+      } else {
+        video.src = currentVideoUrl;
       }
-    } else {
-      if (videoElement) {
-        videoElement.pause();
-        videoElement.src = "";
-      }
-      setHasWebcam(null);
-    }
 
-    return () => {
-      if (videoElement) {
-        videoElement.pause();
-        videoElement.src = "";
+      if (!isPaused) {
+        video.play().catch(console.warn);
       }
     };
-  }, [isActive]);
+
+    setupVideo();
+
+    return stopStream;
+  }, [isActive, cameraMode, currentVideoUrl, isPaused]);
 
   // Handle Play/Pause programmatic triggers coming from upper panels
   useEffect(() => {
@@ -525,6 +530,28 @@ export default function WebcamPanel({
     return () => cancelAnimationFrame(animId);
   }, [isActive, isPaused, accuracy, exercise, isCalibrated, lastCVResult]);
 
+  // ─── Video End Detection ─────────────────────────────────────────────────────
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement || !isActive) return;
+
+    const handleVideoEnded = () => {
+      if (handleEndSession) {
+        handleEndSession();
+      }
+    };
+
+    if (cameraMode === "video") {
+      videoElement.addEventListener("ended", handleVideoEnded);
+    }
+
+    return () => {
+      if (cameraMode === "video") {
+        videoElement.removeEventListener("ended", handleVideoEnded);
+      }
+    };
+  }, [isActive, handleEndSession]);
+
   return (
     <Card
       padding="0"
@@ -765,14 +792,27 @@ export default function WebcamPanel({
             Press start to process the preloaded shoulder press target run video
             through the AI detection layout framework.
           </p>
-          <Button
-            size="lg"
-            icon="play_arrow"
-            onClick={onStart}
-            className="px-5 py-3 shadow-primary"
-          >
-            Start Video Session
-          </Button>
+          <div className="flex gap-3 justify-center">
+            <Button
+              size="lg"
+              variant="primary"
+              icon="movie"
+              onClick={startDemo}
+              className="px-4 whitespace-nowrap"
+            >
+              Demo Video
+            </Button>
+
+            <Button
+              size="lg"
+              variant="primary"
+              icon="videocam"
+              onClick={startLive}
+              className="px-4  whitespace-nowrap"
+            >
+              Live Webcam
+            </Button>
+          </div>
         </div>
       )}
     </Card>

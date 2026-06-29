@@ -36,8 +36,8 @@ export default function LiveMonitoringPage() {
   } = useSession();
 
   const [showSummary, setShowSummary] = useState(false);
-  // Guard state to prevent the initialization hook from auto-starting a new session
   const [isEnding, setIsEnding] = useState(false);
+  const [cameraMode, setCameraMode] = useState(null); // "video" | "webcam"
 
   useEffect(() => {
     if (!exerciseId) {
@@ -81,6 +81,22 @@ export default function LiveMonitoringPage() {
 
   if (!selectedExercise) return null;
 
+  const handleClose = () => {
+    setShowSummary(false);
+    clearSessionSummary();
+    setIsEnding(false);
+  };
+
+  const startDemo = () => {
+    setCameraMode("video");
+    enableCamera();
+  };
+
+  const startLive = () => {
+    setCameraMode("webcam");
+    enableCamera();
+  };
+
   return (
     <div className="row g-3 h-100 align-items-stretch">
       {/* Main Webcam Area - 70-80% of width */}
@@ -90,12 +106,13 @@ export default function LiveMonitoringPage() {
           <WebcamPanel
             isActive={cameraActive}
             isPaused={isPaused}
-            onStart={enableCamera}
             reps={reps}
             statusMsg={statusMsg}
             accuracy={accuracy}
             exercise={selectedExercise}
             isCalibrated={isCalibrated}
+            handleEndSession={handleEndSession}
+            cameraMode={cameraMode}
           />
         </div>
 
@@ -108,15 +125,27 @@ export default function LiveMonitoringPage() {
           }}
         >
           {!cameraActive ? (
-            <Button
-              size="lg"
-              variant="primary"
-              icon="videocam"
-              onClick={enableCamera}
-              className="px-5"
-            >
-              Start Camera & Tracking
-            </Button>
+            <div className="d-flex gap-3">
+              <Button
+                size="lg"
+                variant="primary"
+                icon="movie"
+                onClick={startDemo}
+                className="px-4"
+              >
+                Demo Video
+              </Button>
+
+              <Button
+                size="lg"
+                variant="primary"
+                icon="videocam"
+                onClick={startLive}
+                className="px-4"
+              >
+                Live Webcam
+              </Button>
+            </div>
           ) : (
             <div className="d-flex gap-3 w-100 justify-content-center">
               {isPaused ? (
@@ -174,7 +203,7 @@ export default function LiveMonitoringPage() {
       {/* Summary Modal on Session End */}
       <SessionSummaryModal
         isOpen={showSummary}
-        onClose={handleFinish}
+        onClose={handleClose}
         onFinish={handleFinish}
         sessionData={lastSessionSummary}
       />
