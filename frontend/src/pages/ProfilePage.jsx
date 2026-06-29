@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useEffect, useState } from "react";
+import Button from "../components/common/Button";
 import Card from "../components/common/Card";
 import InputField from "../components/common/InputField";
-import Button from "../components/common/Button";
-import { getInitials, formatDate } from "../utils/helpers";
+import { useAuth } from "../hooks/useAuth";
+import { formatDate, getInitials } from "../utils/helpers";
 
 export default function ProfilePage() {
   const { user, updateProfile } = useAuth();
@@ -82,7 +82,7 @@ export default function ProfilePage() {
           </p>
 
           <div className="d-flex justify-content-center gap-2 mb-5">
-            <span className="badge rounded-pill bg-primary-color bg-opacity-10 text-primary text-label-sm px-3 py-2 text-capitalize">
+            <span className="badge rounded-pill bg-primary-color bg-opacity-10  text-label-sm px-3 py-2 text-capitalize">
               {user.role} Account
             </span>
           </div>
@@ -101,7 +101,7 @@ export default function ProfilePage() {
                   Member Since
                 </div>
                 <div className="text-body-md font-bold">
-                  {formatDate(user.memberSince)}
+                  {formatDate(user.created_at)}
                 </div>
               </div>
             </div>

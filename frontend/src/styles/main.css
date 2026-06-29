@@ -205,11 +205,8 @@ a:hover, button:hover {
 .table tr,
 .table td {
   background-color: var(--color-background) !important;
+  padding:  2rem;
 }
-
-
-
-
 
 
 /* --- Material Symbols --- */

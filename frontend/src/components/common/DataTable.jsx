@@ -18,7 +18,7 @@ export default function DataTable({
   return (
     <div className={`table-responsive ${className}`}>
       <table
-        className="table table-hover mb-0"
+        className="table table-hover mb-0 "
         style={{ borderCollapse: "collapse" }}
       >
         <thead>
