@@ -3,6 +3,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from apscheduler.schedulers.background import BackgroundScheduler
+from schedulers.sessions import auto_end_active_sessions
 
 # Load env variables before config
 load_dotenv()
@@ -89,7 +91,13 @@ def seed_exercises():
 
 
 
+
 if __name__ == '__main__':
     app = create_app()
     port = int(os.getenv('PORT', 5000))
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(auto_end_active_sessions, trigger="interval", minutes=30)
+    scheduler.start()
+
     app.run(host='0.0.0.0', port=port, debug=True)

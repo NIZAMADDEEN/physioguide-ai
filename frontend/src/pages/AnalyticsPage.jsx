@@ -180,11 +180,11 @@ export default function AnalyticsPage() {
         ) : (
           <DataTable
             columns={[
-              { key: "region", label: "Body Region" },
+              { key: "joint", label: "Body Region" },
               {
                 key: "score",
                 label: "Current Score",
-                render: (r) => <span className="font-bold">{r.score}%</span>,
+                render: (r) => <span className="font-bold">{r.score} %</span>,
               },
               {
                 key: "change",
@@ -192,13 +192,13 @@ export default function AnalyticsPage() {
                 render: (r) => (
                   <span
                     className={
-                      r.change >= 0
+                      r.score >= 0
                         ? "text-secondary font-bold"
                         : "text-error font-bold"
                     }
                   >
-                    {r.change > 0 ? "+" : ""}
-                    {r.change}%
+                    {r.score > 0 ? "+" : ""}
+                    {r.score}%
                   </span>
                 ),
               },
