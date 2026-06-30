@@ -109,7 +109,7 @@ export default function TestimonialsSection() {
                       <img
                         alt={t.name}
                         className="w-full h-full object-cover"
-                        src={t.avatar_url}
+                        src="https://static.vecteezy.com/system/resources/previews/055/630/930/non_2x/young-man-character-avatar-with-brown-hair-and-faceless-portrait-vector.jpg"
                       />
                     ) : (
                       <span className="material-symbols-outlined text-[32px]">
@@ -212,7 +212,7 @@ export default function TestimonialsSection() {
                     {formData.avatar_url && (
                       <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-outline-variant">
                         <img
-                          src={formData.avatar_url}
+                          src="https://static.vecteezy.com/system/resources/previews/021/548/095/original/default-profile-picture-avatar-user-avatar-icon-person-icon-head-icon-profile-picture-icons-default-anonymous-user-male-and-female-businessman-photo-placeholder-social-network-avatar-portrait-free-vector.jpg "
                           alt="Preview"
                           className="w-full h-full object-cover"
                         />

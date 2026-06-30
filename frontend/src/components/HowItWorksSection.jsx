@@ -82,7 +82,7 @@ export default function HowItWorksSection() {
               <img
                 alt="User tracking progress on laptop"
                 className="rounded-xl shadow-xl w-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvDQeltTTS3N9p1TPJWTnCAIEg7zC0H75LRgAAIvqrMztDeKsXscHrpZ1wSKYzJY2TeHbCmF_Xq5JGyTmKybo2tJpwDVFdzkeYamLY8qd8R_FYwd3jqsWtY0AMpxlHjfXiCRHbOscljt5Y7dILqqPOg2C7GR2FxYTMqi8QD_XYBMkx8psIVOPQrevWOrS4DIszLPrmeA--D9vdEfMazyLkPgEYXmpNFdyUG1iuV9jFCd1LE75dMD1SMNjuhGfr0mUX-IpeQFcq9nwZ"
+                src="./hero.jpg"
               />
             </div>
           </div>

@@ -36,7 +36,7 @@ export default function HeroSection() {
             <img
               alt="Physiotherapy session with realtime overlay"
               className="w-full h-auto object-cover aspect-video"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAduGkzaiET5TGJxDJGaMhO2CujxyHyalhPs9cYTMvwtqqqUBT4CS8YeWoLKtupiMK_RhtiK3_QQ-S7U6zMqQn7zWkeyAXzn5ykJp7YewvxU5byiEaSyVuqze5U8PbhuK0fX5VDI1rKpsa5vjqnCzJEewu5xyI9x_5SS7DuCLCvO5Rqh1HibgHtYyOu1hPXWAdtg4z3E2zIHMRsnHOOp89TcY2TeSWCz-sxftH4JLGBSQAavGCvwThm3tp76F-2lUud5xZSawlx2PB0"
+              src="./hero.jpg"
             />
             {/* AI UI Overlay elements */}
             <div className="absolute top-4 right-4 glass-card p-sm rounded-lg flex items-center gap-xs animate-pulse">
